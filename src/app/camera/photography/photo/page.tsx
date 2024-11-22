@@ -8,8 +8,7 @@ export default function Photo() {
     const [photo, setPhoto] = useState<string | null>(null);
 
     useEffect(() => {
-        const query = new URLSearchParams(window.location.search);
-        const photoData = query.get("photo");
+        const photoData = localStorage.getItem("photoData");
         if (photoData) {
             setPhoto(photoData);
         }
@@ -19,8 +18,8 @@ export default function Photo() {
         <div>
             {photo ? (
                 <div>
-                    <Image src={photo} alt="撮影した写真" />
-                    <button onClick={() => router.push("/cameraPreview")}>戻る</button>
+                    <Image src={photo} alt="撮影した写真" width={500} height={500} />
+                    <button onClick={() => router.push("../photography")}>戻る</button>
                 </div>
             ) : (
                 <p>写真が見つかりませんでした。</p>

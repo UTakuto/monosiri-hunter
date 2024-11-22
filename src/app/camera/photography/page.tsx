@@ -1,10 +1,9 @@
 "use client";
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-export default function CameraPreview() {
+export default function Photography() {
     const videoRef = useRef<HTMLVideoElement>(null);
-    const [photo, setPhoto] = useState<string | null>(null);
     const router = useRouter();
 
     useEffect(() => {
@@ -31,11 +30,8 @@ export default function CameraPreview() {
             if (context) {
                 context.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
                 const dataUrl = canvas.toDataURL("image/png");
-                setPhoto(dataUrl);
-                localStorage.setItem("photoData", dataUrl);
-                router.push(`./photography/photo`);
-
-                console.log(dataUrl);
+                localStorage.setItem("photoData", dataUrl); // 写真データをlocalStorageに保存
+                router.push("./photography/photo");
             }
         }
     };

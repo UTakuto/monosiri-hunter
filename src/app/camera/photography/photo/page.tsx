@@ -18,7 +18,7 @@ export default function Photo() {
         <div>
             {photo ? (
                 <div>
-                    <Image src={photo} alt="撮影した写真" width={500} height={500} />
+                    <Image src={photo} alt="撮影した写真" width={700} height={500} />
                     <button onClick={() => router.push("../photography")}>戻る</button>
                 </div>
             ) : (

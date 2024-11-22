@@ -40,6 +40,7 @@ export default function Photography() {
         <div>
             <video ref={videoRef} width="100%" height="100vh" />
             <button onClick={takePhoto}>撮影</button>
+            <button onClick={() => router.push("/")}>戻る</button>
         </div>
     );
 }

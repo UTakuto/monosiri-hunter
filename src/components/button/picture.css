@@ -1,34 +1,30 @@
-.cameraCompoWrap {
-    width: 100%;
-}
-
-.searchPicture {
+.bookImage {
     position: absolute;
     z-index: 10;
-    top: 18px;
-    left: 165px;
+    top: -15px;
+    left: 130px;
 }
 
-.cameraButton {
+.pictureBtn {
     position: relative;
-    width: 250px;
-    height: 100px;
-    background-color: #FF7530;
+    width: 170px;
+    height: 70px;
+    background-color: #FFE681;
     border: none;
     border-radius: 10px;
     box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.25) inset;
     filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
-    font-size: 40px;
+    font-size: 24px;
     font-weight: bold;
     letter-spacing: 2px;
-    color: #FFFAE6;
+    color: #39190A;
 }
 
 .border {
     width: 100%;
     height: 100%;
     margin: auto;
-    padding: 20px 33px;
-    border: 2px dashed #FFE681;
+    padding: 15px 38px;
+    border: 2px dashed #FF7530;
     border-radius: 6px;
 }

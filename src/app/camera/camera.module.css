@@ -1,10 +1,35 @@
 .cameraCompoWrap {
     width: 100%;
-    /* height: 100vh; */
-    /* 
-    .image {
-        width: 100px;
-        height: 200px;
-        object-fit: cover;
-    } */
+}
+
+.searchPicture {
+    position: absolute;
+    z-index: 10;
+    top: 18px;
+    left: 165px;
+}
+
+.cameraButton {
+    position: relative;
+    width: 250px;
+    height: 100px;
+    background-color: #FF7530;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.25) inset;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+    font-size: 40px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    color: #FFFAE6;
+
+}
+
+.border {
+    width: 100%;
+    height: 100%;
+    margin: auto;
+    padding: 20px 33px;
+    border: 2px dashed #FFE681;
+    border-radius: 6px;
 }

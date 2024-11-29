@@ -1,13 +1,17 @@
 "use client";
-import Link from "next/link";
-import Camera from "./camera/page";
+import Camera from "./camera/Page";
+import Picture from "../components/button/Picture";
+import style from "./index.module.css";
 
-export default function page() {
+
+export default function Page() {
     return (
-        <div>
-            <Camera />
-            {/* <Link href="./camera">camera</Link> */}
-            <Link href="./pictureBook">picture book</Link>
+        <div className={style.wrapper}>
+            <div className={style.logo}></div>
+            <div className={style.btnWrap}>
+                <Camera />
+                <Picture />
+            </div>
         </div>
     );
 }

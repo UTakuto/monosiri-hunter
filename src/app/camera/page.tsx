@@ -1,6 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import style from "./camera.module.css";
+import Image from "next/image";
 
 export default function Camera() {
     const router = useRouter();
@@ -13,7 +14,10 @@ export default function Camera() {
     return (
         <div className={style.cameraCompoWrap}>
             <div className={style.buttonBox}>
-                <button onClick={startCamera}>カメラ起動</button>
+                <button className={style.cameraButton} onClick={startCamera}>
+                    <span className={style.border}>しらべる</span>
+                    <Image className={style.searchPicture} src="/searchImage.png" alt="" width={90} height={75} />
+                </button>
             </div>
         </div>
     );

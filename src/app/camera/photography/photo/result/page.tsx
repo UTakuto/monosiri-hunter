@@ -1,8 +1,7 @@
-// app/result/page.tsx
 "use client";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-// import Image from "next/image";
+import style from "../../../camera.module.css";
 
 interface AnalysisResult {
     content: string;
@@ -12,41 +11,64 @@ interface AnalysisResult {
 export default function Result() {
     const router = useRouter();
     const [result, setResult] = useState<AnalysisResult | null>(null);
+    const [analyzing, setAnalyzing] = useState(true);
 
     useEffect(() => {
-        const savedResult = localStorage.getItem("analysisResult");
-        if (savedResult) {
-            setResult(JSON.parse(savedResult));
-        } else {
-            router.push("/photography");
-        }
+        const analyze = async () => {
+            try {
+                const savedData = localStorage.getItem("analysisTarget");
+                if (!savedData) {
+                    router.push("./camera/photography");
+                    return;
+                }
+
+                const { imageUrl } = JSON.parse(savedData);
+
+                const response = await fetch("/api/analyze", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ image: imageUrl }),
+                });
+
+                const data = await response.json();
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+
+                setResult({
+                    content: data.result.choices[0].message.content,
+                    imageUrl: imageUrl,
+                });
+            } catch (error) {
+                console.error("分析エラー:", error);
+                alert("画像の分析に失敗しました。");
+            } finally {
+                setAnalyzing(false);
+            }
+        };
+
+        analyze();
     }, [router]);
 
     return (
-        <div className="container mx-auto p-4">
-            <p className="text-2xl font-bold mb-6">これは、</p>
-            {result ? (
-                <div className="space-y-4">
-                    {/* <Image
-                        src={result.imageUrl}
-                        alt="分析した写真"
-                        className="w-full max-w-2xl mx-auto rounded-lg shadow-lg"
-                        width={500}
-                        height={500}
-                    /> */}
-                    <div className="bg-white p-6 rounded-lg shadow-lg">
-                        <h1 className="text-xl font-semibold mb-4">{result.content}</h1>
-                        {/* <p className="whitespace-pre-wrap text-gray-700">{result.content}</p> */}
-                    </div>
-                    {/* <button
-                        onClick={() => router.push("/photography")}
-                        className="mt-4 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-                    >
-                        あたらしいしゃしんをとる
-                    </button> */}
+        <div className={style.container}>
+            <div className={style.header}>
+                <button
+                    onClick={() => router.push("/camera/photography")}
+                    className="mt-4 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                >
+                    もどる
+                </button>
+                <p className={style.headerText}>これは、</p>
+            </div>
+            {analyzing ? (
+                <p className={style.loading}>しらべているよ...</p>
+            ) : result ? (
+                <div className={style.resultContainer}>
+                    <h1 className={style.resultText}>{result.content}</h1>
                 </div>
             ) : (
-                <p>よみこみちゅう</p>
+                <p className={style.loading}>しゃしんがなかったよ</p>
             )}
         </div>
     );

@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "@/lib/firebase";
+import { convertToWebP } from "@/utils/photoResizer";
 
 export default function Photo() {
     const router = useRouter();
@@ -23,14 +24,17 @@ export default function Photo() {
         try {
             setUploading(true);
 
+            // 画像を圧縮
+            const compressedImage = await convertToWebP(photo);
+
             // Firebase Storageにアップロード
-            const response = await fetch(photo);
+            const response = await fetch(compressedImage);
             const blob = await response.blob();
-            const fileName = `photos/${Date.now()}.jpg`;
+            const fileName = `photos/${Date.now()}.webp`; // 拡張子をwebpに変更
             const storageRef = ref(storage, fileName);
 
             await uploadBytes(storageRef, blob);
-            console.log(`画像をアップロードしました: ${fileName}`);
+            console.log(`圧縮された画像をアップロードしました: ${fileName}`);
 
             // アップロードした画像のURLを取得
             const downloadURL = await getDownloadURL(storageRef);

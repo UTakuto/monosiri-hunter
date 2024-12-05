@@ -11,7 +11,7 @@
     height: 100%;
     display: flex;
     justify-content: space-evenly;
-    background: no-repeat url("/background.png") center center / cover;
+    /* background: no-repeat url("/background.png") center center / cover; */
 }
 
 .logo {

@@ -18,7 +18,7 @@ export default function Result() {
             try {
                 const savedData = localStorage.getItem("analysisTarget");
                 if (!savedData) {
-                    router.push("./camera/photography");
+                    router.push("../../../camera/photography");
                     return;
                 }
 

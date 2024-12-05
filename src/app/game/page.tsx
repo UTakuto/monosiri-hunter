@@ -1,7 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import style from "../camera/camera.module.css";
+import style from "./game.module.css";
+import Register from "@/components/register/register";
 
 interface GameData {
     original: string;
@@ -13,6 +14,7 @@ export default function Game() {
     const [gameData, setGameData] = useState<GameData | null>(null);
     const [selectedChars, setSelectedChars] = useState<string[]>([]);
     const [isCorrect, setIsCorrect] = useState(false);
+    const [showRegister, setShowRegister] = useState(false);
 
     useEffect(() => {
         const savedData = localStorage.getItem("gameTarget");
@@ -49,7 +51,7 @@ export default function Game() {
     };
 
     const goToRegister = () => {
-        console.log("登録画面に移動します");
+        setShowRegister(true);
     };
 
     return (
@@ -134,6 +136,9 @@ export default function Game() {
                     </div>
                 )}
             </div>
+            {showRegister && gameData?.original && (
+                <Register word={gameData.original} onClose={() => setShowRegister(false)} />
+            )}
         </div>
     );
 }

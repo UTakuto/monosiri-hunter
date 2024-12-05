@@ -33,6 +33,8 @@ export default function Result() {
     };
 
     useEffect(() => {
+        const abortController = new AbortController();
+
         const analyze = async () => {
             try {
                 const savedData = localStorage.getItem("analysisTarget");
@@ -46,42 +48,35 @@ export default function Result() {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ image: imageUrl }),
+                    signal: abortController.signal, // アボートシグナルを追加
                 });
 
                 const data = await response.json();
-                console.log("API Response:", data);
-                if (data.error) {
-                    throw new Error(data.error);
+
+                // コンポーネントがマウントされている場合のみ状態を更新
+                if (!abortController.signal.aborted) {
+                    console.log("API Response:", data);
+                    // ... 残りの処理
                 }
-
-                // デバッグ用ログ
-                console.log("API Response:", data);
-                const content = data.result.choices[0].message.content;
-                console.log("Content:", content);
-
-                // 改行で分割して名前と説明文を取得
-                const [name, description] = content.split("\n\n");
-                console.log("Name:", name);
-                console.log("Description:", description);
-
-                if (!name || !description) {
-                    throw new Error("データの分割に失敗しました");
-                }
-
-                setResult({
-                    name: name.trim(),
-                    description: description.trim(),
-                    imageUrl,
-                });
             } catch (error) {
+                if ((error as any).name === "AbortError") {
+                    console.log("Fetch aborted");
+                    return;
+                }
                 console.error("分析エラー:", error);
-                alert("画像の分析に失敗しました。");
             } finally {
-                setAnalyzing(false);
+                if (!abortController.signal.aborted) {
+                    setAnalyzing(false);
+                }
             }
         };
 
         analyze();
+
+        // クリーンアップ関数
+        return () => {
+            abortController.abort();
+        };
     }, [router]);
 
     return (

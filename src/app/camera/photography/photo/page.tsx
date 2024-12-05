@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "@/lib/firebase";
 import { convertToWebP } from "@/utils/photoResizer";
+import style from "../../../index.module.css";
+import "./photo.css";
 
 export default function Photo() {
     const router = useRouter();
@@ -57,14 +59,22 @@ export default function Photo() {
     };
 
     return (
-        <div>
+        <div className={style.container}>
             {photo ? (
-                <div>
-                    <Image src={photo} alt="撮影した写真" width={850} height={500} />
-                    <button onClick={handleUpload} disabled={uploading}>
-                        {uploading ? "アップロード中..." : "いいよ！"}
-                    </button>
-                    <button onClick={() => router.push("../photography")}>もどる</button>
+                <div className={style.wrapper}>
+                    <div className="imageWrapper">
+                        <Image src={photo} alt="撮影した写真" width={330} height={330} />
+                    </div>
+                    <div className={style.btnWrap}>
+                        <button className="proceedBtn" onClick={handleUpload} disabled={uploading}>
+                            <span className="border">
+                                {uploading ? "アップロード中..." : "いいよ！"}
+                            </span>
+                        </button>
+                        <button className="backBtn" onClick={() => router.push("../photography")}>
+                            <span className="backBorder">もどる</span>
+                        </button>
+                    </div>
                 </div>
             ) : (
                 <p>写真が見つかりませんでした。</p>

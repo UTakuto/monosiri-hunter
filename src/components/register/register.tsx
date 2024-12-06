@@ -32,7 +32,7 @@ export default function Register({ word, onClose }: RegisterProps) {
                 return;
             }
 
-            const { imageUrl } = JSON.parse(targetData);
+            JSON.parse(targetData);
             const { original } = JSON.parse(gameData);
 
             // 分析データを設定

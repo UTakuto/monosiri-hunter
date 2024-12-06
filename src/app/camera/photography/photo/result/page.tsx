@@ -56,15 +56,27 @@ export default function Result() {
                 }
 
                 const content = data.result.choices[0].message.content;
-                const [name, ...descriptionParts] = content.split("\n").filter(Boolean);
-                const description = descriptionParts.join(" ");
+                const [rawName, ...descriptionParts] = content.split("\n").filter(Boolean);
+
+                // 名前の正規表現パターンを拡張
+                const namePattern =
+                    /^(ものの名前|物体の名前|物体のなまえ|ぶったいのなまえ|ぶったいの名前)[:：]/;
+                const name = rawName.replace(namePattern, "").trim();
+
+                // 説明文の正規表現パターンを拡張
+                const descriptionPattern =
+                    /^(せつめい|説明文|せつめい文|説明ぶん|せつめいぶん)[:：]/;
+                const description = descriptionParts
+                    .join(" ")
+                    .replace(descriptionPattern, "")
+                    .trim();
 
                 // 説明文をlocalStorageに保存
                 localStorage.setItem("description", description);
 
                 setResult({
-                    name: name.trim(),
-                    description: description.trim() || "説明はありません",
+                    name,
+                    description: description || "説明はありません",
                     imageUrl,
                 });
 

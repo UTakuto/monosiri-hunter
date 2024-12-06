@@ -28,13 +28,13 @@ export default function Game() {
                         setGameData(parsedData);
                     } else {
                         console.error("Invalid game data format");
-                        router.push("/camera/photography");
+                        router.push("/photography");
                     }
                 }
             } catch (error) {
                 console.error("Error loading game data:", error);
                 if (mounted) {
-                    router.push("/camera/photography");
+                    router.push("/photography");
                 }
             }
         };
@@ -81,7 +81,7 @@ export default function Game() {
         <div className={style.container}>
             <div className={style.header}>
                 <button
-                    onClick={() => router.push("/camera/photography")}
+                    onClick={() => router.push("/photography")}
                     className="mt-4 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
                 >
                     もどる

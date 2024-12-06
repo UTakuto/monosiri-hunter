@@ -1,6 +1,6 @@
 "use client";
-import Camera from "./camera/page";
-import Picture from "../components/button/Picture";
+import Camera from "../components/button/camera/camera";
+import Picture from "../components/button/picture/Picture";
 import style from "./index.module.css";
 
 export default function Page() {

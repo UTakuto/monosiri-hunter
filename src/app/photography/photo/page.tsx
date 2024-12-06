@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "@/lib/firebase";
 import { convertToWebP } from "@/utils/photoResizer";
-import style from "../../../index.module.css";
+import style from "../../index.module.css";
 import "./photo.css";
 
 export default function Photo() {
@@ -72,7 +72,7 @@ export default function Photo() {
                                 {uploading ? "アップロード中..." : "いいよ！"}
                             </span>
                         </button>
-                        <button className="backBtn" onClick={() => router.push("../photography")}>
+                        <button className="backBtn" onClick={() => router.push("/photography")}>
                             <span className="backBorder">もどる</span>
                         </button>
                     </div>

@@ -60,7 +60,7 @@ export default function Result() {
 
                 // 名前の正規表現パターンを拡張
                 const namePattern =
-                    /^(ものの名前|物体の名前|物体のなまえ|ぶったいのなまえ|ぶったいの名前)[:：]/;
+                    /^(ものの名前|物体の名前|物体のなまえ|ぶったいのなまえ|ぶったいの名前|もしばんごう|もじ番号|文字ばんごう)[:：]/;
                 const name = rawName.replace(namePattern, "").trim();
 
                 // 説明文の正規表現パターンを拡張

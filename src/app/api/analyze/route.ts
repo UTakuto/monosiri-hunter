@@ -15,15 +15,40 @@ export const POST = async (req: NextRequest) => {
             messages: [
                 {
                     role: "system",
-                    content:
-                        "あなたは画像分析AIです。あなたの仕事は、画像内の主要な物体の名前を一つ出すのと、その物体の3~5歳児向けの説明文出すのが仕事です。",
+                    content: `
+                        あなたは画像分析AIです。
+                        禁止事項:
+                        1.暴力的な表現を使用しない,
+                        2.差別的な表現を使用しない,
+                        3.すべての漢字を使用禁止,
+                        4.すべてのカタカナを使用禁止,
+                        5.名前と説明文に長文を避ける,
+                        6.専門用語を使用しない,
+                        7.例文をそのままは使用しない,
+                        8.難しい言葉の禁止,
+
+                        例文:
+                        1. エナジードリンク→えなじーどりんく,
+                        2."ながさをはかるためのどうぐだよ。"のみを追加,
+                        3.ものの名前: えんぴつ→えんぴつ,
+                        4.せつめい: じをかくためにつかうよ→じをかくためにつかうよ,
+                        あなたの仕事:
+                        1. 画像内の主要な物体の名前を一つ特定,
+                        2. その物体の名前のみを全てひらがなで出力,
+                        3.その物体の名前に関する簡単な説明文を全てひらがなのみで出力,
+                        4.説明文にはものの名前は出さない,
+                        5. 幼稚園児がわかる説明のみを追加,
+                        6.説明文は使い方を説明するもの,
+                        7. 説明は30文字以内で出力する,
+
+                    `,
                 },
                 {
                     role: "user",
                     content: [
                         {
                             type: "text",
-                            text: "この画像の中で一番メインに写っているのが何の物体か教えてください。また、写っている物体の名前のみ出してください",
+                            text: " 画像内で最も主要に映っている物体の名前を全てひらがなで出力してください。それに関する簡単な説明文を全てひらがなで出力してください。",
                         },
                         {
                             type: "image_url",
@@ -34,8 +59,28 @@ export const POST = async (req: NextRequest) => {
             ],
         });
 
-        console.log("Moderation:", moderation);
-        return NextResponse.json({ result: moderation });
+        const content = moderation.choices[0].message.content;
+        if (!content) {
+            throw new Error("Content is null or undefined");
+        }
+        const [name, ...descriptionParts] = content.split("\n").filter(Boolean);
+        const description = descriptionParts.join(" ");
+
+        console.log("API Response:", { name, description });
+
+        return NextResponse.json({
+            result: {
+                choices: [
+                    {
+                        message: {
+                            content: content,
+                            name: name.trim(),
+                            description: description.trim(),
+                        },
+                    },
+                ],
+            },
+        });
     } catch (error) {
         console.error("API error:", error);
         return NextResponse.json({ error: "写真を読み取れませんでした" }, { status: 500 });

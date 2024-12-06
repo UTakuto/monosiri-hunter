@@ -1,6 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
-import style from "./camera.module.css";
+import style from "@/app/photography/camera.module.css";
 import Image from "next/image";
 
 export default function Camera() {
@@ -8,7 +8,7 @@ export default function Camera() {
 
     const startCamera = () => {
         // カメラプレビュー用のページに遷移
-        router.push("./camera/photography");
+        router.push("./photography");
     };
 
     return (
@@ -16,7 +16,13 @@ export default function Camera() {
             <div className={style.buttonBox}>
                 <button className={style.cameraButton} onClick={startCamera}>
                     <span className={style.border}>しらべる</span>
-                    <Image className={style.searchPicture} src="/searchImage.png" alt="" width={90} height={75} />
+                    <Image
+                        className={style.searchPicture}
+                        src="/searchImage.png"
+                        alt=""
+                        width={90}
+                        height={75}
+                    />
                 </button>
             </div>
         </div>

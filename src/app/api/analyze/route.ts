@@ -51,8 +51,28 @@ export const POST = async (req: NextRequest) => {
             ],
         });
 
-        console.log("Moderation:", moderation);
-        return NextResponse.json({ result: moderation });
+        const content = moderation.choices[0].message.content;
+        if (!content) {
+            throw new Error("Content is null or undefined");
+        }
+        const [name, ...descriptionParts] = content.split("\n").filter(Boolean);
+        const description = descriptionParts.join(" ");
+
+        console.log("API Response:", { name, description });
+
+        return NextResponse.json({
+            result: {
+                choices: [
+                    {
+                        message: {
+                            content: content,
+                            name: name.trim(),
+                            description: description.trim(),
+                        },
+                    },
+                ],
+            },
+        });
     } catch (error) {
         console.error("API error:", error);
         return NextResponse.json({ error: "写真を読み取れませんでした" }, { status: 500 });

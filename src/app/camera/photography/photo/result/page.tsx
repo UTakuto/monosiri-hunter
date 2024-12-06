@@ -14,12 +14,13 @@ export default function Result() {
     const [result, setResult] = useState<AnalysisResult | null>(null);
     const [analyzing, setAnalyzing] = useState(true);
 
+    // 画面タップ処理の追加
+    // app/photo/result/page.tsx の修正
     const handleScreenTap = () => {
         if (result?.name) {
             // nameを使用するように変更
             const characters = result.name.split(""); // 名前のみを分割
             const shuffled = characters.sort(() => Math.random() - 0.5);
-
             localStorage.setItem(
                 "gameTarget",
                 JSON.stringify({
@@ -27,14 +28,11 @@ export default function Result() {
                     shuffled: shuffled,
                 })
             );
-
             router.push("/game");
         }
     };
 
     useEffect(() => {
-        const abortController = new AbortController();
-
         const analyze = async () => {
             try {
                 const savedData = localStorage.getItem("analysisTarget");
@@ -48,38 +46,42 @@ export default function Result() {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ image: imageUrl }),
-                    signal: abortController.signal, // アボートシグナルを追加
                 });
 
                 const data = await response.json();
+                console.log("API Response:", data);
 
-                // コンポーネントがマウントされている場合のみ状態を更新
-                if (!abortController.signal.aborted) {
-                    console.log("API Response:", data);
-                    // ... 残りの処理
+                if (data.error) {
+                    throw new Error(data.error);
                 }
+
+                const content = data.result.choices[0].message.content;
+                const [name, ...descriptionParts] = content.split("\n").filter(Boolean);
+                const description = descriptionParts.join(" ");
+
+                // 説明文をlocalStorageに保存
+                localStorage.setItem("description", description);
+
+                setResult({
+                    name: name.trim(),
+                    description: description.trim() || "説明はありません",
+                    imageUrl,
+                });
+
+                console.log("Result:", { name, description });
             } catch (error) {
-                if ((error as any).name === "AbortError") {
-                    console.log("Fetch aborted");
-                    return;
-                }
                 console.error("分析エラー:", error);
+                alert("画像の分析に失敗しました。");
             } finally {
-                if (!abortController.signal.aborted) {
-                    setAnalyzing(false);
-                }
+                setAnalyzing(false);
             }
         };
 
         analyze();
-
-        // クリーンアップ関数
-        return () => {
-            abortController.abort();
-        };
     }, [router]);
 
     return (
+        // containerにonClickイベントを追加
         <div className={style.container} onClick={handleScreenTap} style={{ cursor: "pointer" }}>
             <div className={style.header}>
                 <button

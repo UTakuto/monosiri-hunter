@@ -17,11 +17,34 @@ export default function Game() {
     const [showRegister, setShowRegister] = useState(false);
 
     useEffect(() => {
-        const savedData = localStorage.getItem("gameTarget");
-        if (savedData) {
-            setGameData(JSON.parse(savedData));
-        }
-    }, []);
+        let mounted = true;
+
+        const loadGameData = () => {
+            try {
+                const savedData = localStorage.getItem("gameTarget");
+                if (savedData && mounted) {
+                    const parsedData = JSON.parse(savedData);
+                    if (parsedData?.original && parsedData?.shuffled) {
+                        setGameData(parsedData);
+                    } else {
+                        console.error("Invalid game data format");
+                        router.push("/camera/photography");
+                    }
+                }
+            } catch (error) {
+                console.error("Error loading game data:", error);
+                if (mounted) {
+                    router.push("/camera/photography");
+                }
+            }
+        };
+
+        loadGameData();
+
+        return () => {
+            mounted = false;
+        };
+    }, [router]);
 
     const handleCharClick = (char: string) => {
         if (selectedChars.length >= (gameData?.original.length || 0)) return;

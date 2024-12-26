@@ -70,7 +70,9 @@ export default function Photo() {
                     <div className={style.btnWrap}>
                         <h2>このしゃしんでいいかな？</h2>
                         <button className="proceedBtn" onClick={handleUpload} disabled={uploading}>
-                            <span className="border">{uploading ? "まってね" : "いいよ！"}</span>
+                            <span className="proceedBorder">
+                                {uploading ? "まってね" : "いいよ！"}
+                            </span>
                         </button>
                         <button className="removeBtn" onClick={() => router.push("/photography")}>
                             <span className="backBorder">もどる</span>

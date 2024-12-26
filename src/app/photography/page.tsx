@@ -1,6 +1,9 @@
 "use client";
 import { useRef, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Arrow from "@/components/button/arrow/arrow";
+import style from "./camera.module.css";
+import Image from "next/image";
 
 export default function Photography() {
     const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -63,22 +66,15 @@ export default function Photography() {
                 throw new Error("Canvas contextの取得に失敗しました");
             }
 
-            // キャンバスサイズをビデオサイズに合わせる
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
-
-            // ビデオフレームをキャンバスに描画
             context.drawImage(video, 0, 0);
 
-            // 画像をBlobに変換
             const blob = await new Promise<Blob>((resolve, reject) => {
                 canvas.toBlob(
                     (blob) => {
-                        if (blob) {
-                            resolve(blob);
-                        } else {
-                            reject(new Error("画像の生成に失敗しました"));
-                        }
+                        if (blob) resolve(blob);
+                        else reject(new Error("画像の生成に失敗しました"));
                     },
                     "image/jpeg",
                     0.95
@@ -95,48 +91,23 @@ export default function Photography() {
     };
 
     return (
-        <div style={{ position: "relative", width: "100%", height: "100vh" }}>
-            <video
-                ref={videoRef}
-                style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                }}
-                playsInline
-                autoPlay
-                muted
-            />
-            <canvas ref={canvasRef} style={{ display: "none" }} />
-            <div
-                style={{
-                    position: "absolute",
-                    bottom: "20px",
-                    width: "100%",
-                    display: "flex",
-                    justifyContent: "center",
-                    gap: "10px",
-                }}
-            >
-                <button onClick={takePhoto}>撮影</button>
-                <button onClick={() => router.push("/")}>戻る</button>
+        <>
+            <div className={style.controls}>
+                <Arrow />
+                {/* <button onClick={takePhoto}>撮影</button> */}
             </div>
-            {error && (
-                <div
-                    style={{
-                        position: "absolute",
-                        top: "20px",
-                        left: "50%",
-                        transform: "translateX(-50%)",
-                        backgroundColor: "rgba(170, 0, 0, 0.8)",
-                        color: "white",
-                        padding: "10px",
-                        borderRadius: "5px",
-                    }}
-                >
-                    {error}
-                </div>
-            )}
-        </div>
+            <div className={style.photoContainer} onClick={takePhoto}>
+                <video ref={videoRef} className={style.video} playsInline autoPlay muted />
+                <canvas ref={canvasRef} className={style.canvas} />
+                <Image
+                    src="/handGesture.png"
+                    alt="タップしてね"
+                    className={style.handGestureImg}
+                    width={280}
+                    height={210}
+                />
+                {error && <div className={style.error}>{error}</div>}
+            </div>
+        </>
     );
 }

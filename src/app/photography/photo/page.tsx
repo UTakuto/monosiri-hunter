@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "@/lib/firebase";
 import { convertToWebP } from "@/utils/photoResizer";
+import Arrow from "@/components/button/arrow/arrow";
 import style from "../../index.module.css";
 import "./photo.css";
 
@@ -60,6 +61,7 @@ export default function Photo() {
 
     return (
         <div className={style.container}>
+            < Arrow />
             {photo ? (
                 <div className={style.wrapper}>
                     <div className="imageWrapper">
@@ -69,10 +71,10 @@ export default function Photo() {
                         <h2>このしゃしんでいいかな？</h2>
                         <button className="proceedBtn" onClick={handleUpload} disabled={uploading}>
                             <span className="border">
-                                {uploading ? "アップロード中..." : "いいよ！"}
+                                {uploading ? "まってね" : "いいよ！"}
                             </span>
                         </button>
-                        <button className="backBtn" onClick={() => router.push("/photography")}>
+                        <button className="removeBtn" onClick={() => router.push("/photography")}>
                             <span className="backBorder">もどる</span>
                         </button>
                     </div>

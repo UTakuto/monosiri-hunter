@@ -2,6 +2,7 @@
 import { useRef, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Arrow from "@/components/button/arrow/arrow";
+import { takePhoto } from "@/utils/takePhoto";
 import style from "./camera.module.css";
 import Image from "next/image";
 
@@ -51,44 +52,24 @@ export default function Photography() {
         };
     }, []);
 
-    const takePhoto = async () => {
-        if (!videoRef.current || !canvasRef.current) {
-            setError("カメラが起動していません");
-            return;
-        }
+    useEffect(() => {
+        const detectBrightness = () => {
+            if (!videoRef.current || !canvasRef.current) return;
 
-        try {
             const video = videoRef.current;
             const canvas = canvasRef.current;
             const context = canvas.getContext("2d");
 
-            if (!context) {
-                throw new Error("Canvas contextの取得に失敗しました");
-            }
+            if (!context || video.videoWidth === 0 || video.videoHeight === 0) return;
 
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
-            context.drawImage(video, 0, 0);
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        };
 
-            const blob = await new Promise<Blob>((resolve, reject) => {
-                canvas.toBlob(
-                    (blob) => {
-                        if (blob) resolve(blob);
-                        else reject(new Error("画像の生成に失敗しました"));
-                    },
-                    "image/jpeg",
-                    0.95
-                );
-            });
-
-            const url = URL.createObjectURL(blob);
-            localStorage.setItem("photoUrl", url);
-            router.push("./photography/photo");
-        } catch (err) {
-            const errorMessage = err instanceof Error ? err.message : "写真の撮影に失敗しました";
-            setError(errorMessage);
-        }
-    };
+        const interval = setInterval(detectBrightness, 1000);
+        return () => clearInterval(interval);
+    }, []);
 
     return (
         <>
@@ -96,7 +77,10 @@ export default function Photography() {
                 <Arrow />
                 {/* <button onClick={takePhoto}>撮影</button> */}
             </div>
-            <div className={style.photoContainer} onClick={takePhoto}>
+            <div
+                className={style.photoContainer}
+                onClick={() => takePhoto(videoRef, canvasRef, setError, router)}
+            >
                 <div className={style.additionalLine}></div>
                 <div className={style.firstFrame}></div>
                 <div className={style.secondFrame}></div>

@@ -15,7 +15,7 @@ export default function Camera() {
         <div className={style.cameraCompoWrap}>
             <div className={style.buttonBox}>
                 <button className={style.cameraButton} onClick={startCamera}>
-                    <span className={style.border}>しらべる</span>
+                    <span className={style.border}>みつける</span>
                     <Image
                         className={style.searchPicture}
                         src="/searchImage.png"

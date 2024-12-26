@@ -121,13 +121,90 @@
     right: 10px;
 }
 
+.additionalLine {
+    position: absolute;
+    width: 350px;
+    height: 350px;
+    border: solid 1px #fefefe;
+    box-shadow: 0px 0px 5px 3px rgba(255, 255, 255, 0.8);
+}
+
+.firstFrame,
+.secondFrame {
+    position: absolute;
+    width: 280px;
+    height: 280px;
+}
+
+.firstFrame::before,
+.firstFrame::after,
+.secondFrame::before,
+.secondFrame::after {
+    content: "";
+    position: absolute;
+    width: 50px; /* 線の長さ */
+    height: 50px; /* 線の長さ */
+    border: 2px solid #fefefe; /* 線の色 */
+    box-sizing: border-box;
+}
+
+.firstFrame::before {
+    top: 0;
+    left: 0;
+    border-width: 2px 0 0 2px; /* 上左 */
+}
+
+.firstFrame::after {
+    bottom: 0;
+    right: 0;
+    border-width: 0 2px 2px 0; /* 右下 */
+}
+
+.secondFrame::before {
+    top: 0;
+    right: 0;
+    border-width: 2px 2px 0 0; /* 上右 */
+}
+
+.secondFrame::after {
+    bottom: 0;
+    left: 0;
+    border-width: 0 0 2px 2px; /* 下左 */
+}
+
+.centerLine {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+}
+
+.centerLine::before,
+.centerLine::after {
+    content: "";
+    position: absolute;
+    width: 2px; /* 線の太さ */
+    height: 50px; /* 線の長さ */
+    background-color: #fefefe; /* 線の色 */
+}
+
+.centerLine::before {
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.centerLine::after {
+    right: 50%;
+    transform: translateX(50%);
+    rotate: 90deg;
+}
+
 .error {
     position: absolute;
     top: 20px;
     left: 50%;
     transform: translateX(-50%);
     background-color: rgba(170, 0, 0, 0.8);
-    color: white;
+    color: #fefefe;
     padding: 10px;
     border-radius: 5px;
 }

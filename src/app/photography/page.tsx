@@ -97,6 +97,10 @@ export default function Photography() {
                 {/* <button onClick={takePhoto}>撮影</button> */}
             </div>
             <div className={style.photoContainer} onClick={takePhoto}>
+                <div className={style.additionalLine}></div>
+                <div className={style.firstFrame}></div>
+                <div className={style.secondFrame}></div>
+                <div className={style.centerLine}></div>
                 <video ref={videoRef} className={style.video} playsInline autoPlay muted />
                 <canvas ref={canvasRef} className={style.canvas} />
                 <Image

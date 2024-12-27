@@ -75,7 +75,6 @@ export default function Photography() {
         <>
             <div className={style.controls}>
                 <Arrow />
-                {/* <button onClick={takePhoto}>撮影</button> */}
             </div>
             <div
                 className={style.photoContainer}

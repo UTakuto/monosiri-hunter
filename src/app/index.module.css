@@ -30,3 +30,15 @@
     justify-content: space-between;
     align-items: center;
 }
+
+.findWrapper {
+    width: 100%;
+    height: 100%;
+}
+
+.descriptionWrap {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

@@ -8,7 +8,7 @@ export default function Camera() {
 
     const startCamera = () => {
         // カメラプレビュー用のページに遷移
-        router.push("./photography");
+        router.push("./findDescription");
     };
 
     return (

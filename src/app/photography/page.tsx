@@ -1,16 +1,25 @@
 "use client";
 import { useRef, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import Arrow from "@/components/button/arrow/arrow";
 import { takePhoto } from "@/utils/takePhoto";
+import { getAdditionalLinePosition } from "@/utils/position";
+import { handlePhotoCapture } from "@/utils/handlePhotoCapture";
 import style from "./camera.module.css";
 import Image from "next/image";
+import Arrow from "@/components/button/arrow/arrow";
 
 export default function Photography() {
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
+    const additionalLineRef = useRef<HTMLDivElement | null>(null);
     const router = useRouter();
     const [error, setError] = useState<string | null>(null);
+
+    // 写真撮影とクロップ処理
+    const handleCapture = async () => {
+        const corners = getAdditionalLinePosition(additionalLineRef);
+        await handlePhotoCapture(canvasRef, corners);
+    };
 
     useEffect(() => {
         const videoElement = videoRef.current;
@@ -78,9 +87,12 @@ export default function Photography() {
             </div>
             <div
                 className={style.photoContainer}
-                onClick={() => takePhoto(videoRef, canvasRef, setError, router)}
+                onClick={() => {
+                    handleCapture();
+                    takePhoto(videoRef, canvasRef, additionalLineRef, setError, router);
+                }}
             >
-                <div className={style.additionalLine}></div>
+                <div ref={additionalLineRef} className={style.additionalLine}></div>
                 <div className={style.firstFrame}></div>
                 <div className={style.secondFrame}></div>
                 <div className={style.centerLine}></div>

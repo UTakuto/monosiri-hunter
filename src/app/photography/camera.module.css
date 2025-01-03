@@ -121,6 +121,14 @@
     right: 10px;
 }
 
+.characterWrap {
+    position: absolute;
+    bottom: 10px;
+    left: 40px;
+    width: 130px;
+    height: 200px;
+}
+
 .additionalLine {
     position: absolute;
     width: 350px;

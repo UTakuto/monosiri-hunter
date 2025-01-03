@@ -19,6 +19,15 @@ export default function Page() {
             <div className={style.descriptionWrap}>
                 <h1>しらないものをみつけにいこう！</h1>
             </div>
+            <div className={cameraStyle.characterWrap}>
+                <Image
+                    className={style.character}
+                    src="/character.png"
+                    alt="キャラクター"
+                    width={150}
+                    height={150}
+                />
+            </div>
             <Image
                 src="/handGesture.png"
                 alt="タップしてね"

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import style from "./game.module.css";
 import Register from "@/components/register/register";
+import { getCharacterRow } from "@/utils/getCharacterRow";
 
 interface GameData {
     original: string;
@@ -146,9 +147,12 @@ export default function Game() {
                             {gameData?.shuffled.map((char, index) => (
                                 <button
                                     key={index}
-                                    className={`${style.gameChar} ${
-                                        selectedChars.includes(char) ? style.usedChar : ""
-                                    }`}
+                                    className={`
+                                        ${style.gameChar} 
+                                        ${style.hiraganaChar} 
+                                        ${selectedChars.includes(char) ? style.usedChar : ""}
+                                        ${style[getCharacterRow(char)]}
+                                    `}
                                     onClick={() => handleCharClick(char)}
                                     disabled={selectedChars.includes(char)}
                                 >

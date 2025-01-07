@@ -33,7 +33,7 @@
     border-radius: 6px;
 }
 
-.container {
+.resultContainer {
     width: 100%;
     height: 100vh;
     display: flex;
@@ -41,21 +41,27 @@
 }
 
 .header {
-    width: 40%;
-    padding: 40px 0 0 40px;
+    height: 20vh;
     display: flex;
-    justify-content: space-around;
+    justify-content: start;
     align-items: center;
+    /* border: solid 1px #ff7530; */
+    /* width: 40%;
+    padding: 40px 0 0 40px;
+    */
 }
 
 .headerText {
+    display: inline;
+    height: 100%;
     font-size: 40px;
     font-weight: bold;
+    padding-top: 50px;
 }
 
-.resultContainer {
+.resultContents {
     width: 100%;
-    height: 100%;
+    height: 80vh;
     flex: 1;
     display: flex;
     flex-direction: column;

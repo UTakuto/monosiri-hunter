@@ -2,3 +2,332 @@
     text-align: center;
     margin-top: 10px;
 }
+
+.hiraganaChar {
+    width: 90px;
+    height: 120px;
+    font-size: 50px;
+    padding: 10px;
+    margin: 5px;
+    border: none;
+    border-radius: 10px;
+    background-color: #ffffff;
+}
+
+.a_group,
+.ka_group,
+.sa_group,
+.ta_group,
+.na_group,
+.ha_group,
+.ma_group,
+.ya_group,
+.ra_group,
+.wa_group,
+.long_vowel_symbol,
+.ga_group,
+.za_group,
+.da_group,
+.ba_group,
+.pa_group,
+.a_youon_group,
+.ya_youon_group,
+.wa_youon_group,
+.tu_sokuon_group {
+    position: relative;
+    z-index: -2;
+}
+
+.a_group:before,
+.ka_group:before,
+.sa_group:before,
+.ta_group:before,
+.na_group:before,
+.ha_group:before,
+.ma_group:before,
+.ya_group:before,
+.ra_group:before,
+.wa_group:before,
+.long_vowel_symbol:before,
+.ga_group:before,
+.za_group:before,
+.da_group:before,
+.ba_group:before,
+.pa_group:before,
+.a_youon_group:before,
+.ya_youon_group:before,
+.wa_youon_group:before,
+.tu_sokuon_group:before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70px;
+    height: 100px;
+    border-radius: 6px;
+}
+
+.a_group:after,
+.ka_group:after,
+.sa_group:after,
+.ta_group:after,
+.na_group:after,
+.ha_group:after,
+.ma_group:after,
+.ya_group:after,
+.ra_group:after,
+.wa_group:after,
+.long_vowel_symbol:after,
+.ga_group:after,
+.za_group:after,
+.da_group:after,
+.ba_group:after,
+.pa_group:after,
+.a_youon_group:after,
+.ya_youon_group:after,
+.wa_youon_group:after,
+.tu_sokuon_group:after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80px;
+    height: 110px;
+    border-radius: 6px;
+    z-index: -1;
+}
+
+/* あ行 */
+.a_group {
+    background-color: var(--a-group-color);
+}
+
+.a_group:before {
+    border: 1px dashed var(--a-group-color);
+}
+
+.a_group:after,
+.a_youon_group:after {
+    background-color: var(--a-group-bg-color);
+}
+
+/* あ行拗音 */
+.a_youon_group {
+    background-color: var(--a-youon-group-color);
+}
+
+.a_youon_group:before {
+    border: 1px dashed var(--a-youon-group-color);
+}
+
+/* か行 */
+.ka_group {
+    background-color: var(--ka-group-color);
+}
+
+.ka_group:before {
+    border: 1px dashed var(--ka-group-color);
+}
+
+.ka_group:after,
+.ga_group:after {
+    background-color: var(--ka-group-bg-color);
+}
+
+/* が行 */
+.ga_group {
+    background-color: var(--ga-group-color);
+}
+
+.ga_group:before {
+    border: 1px dashed var(--ga-group-color);
+}
+
+/* さ行 */
+.sa_group {
+    background-color: var(--sa-group-color);
+}
+
+.sa_group:before {
+    border: 1px dashed var(--sa-group-color);
+}
+
+.sa_group:after,
+.za_group:after {
+    background-color: var(--sa-group-bg-color);
+}
+
+/* ざ行 */
+.za_group {
+    background-color: var(--za-group-color);
+}
+
+.za_group:before {
+    border: 1px dashed var(--za-group-color);
+}
+
+/* た行 */
+.ta_group {
+    background-color: var(--ta-group-color);
+}
+
+.ta_group:before {
+    border: 1px dashed var(--ta-group-color);
+}
+
+.ta_group:after,
+.da_group:after,
+.tu_sokuon_group:after {
+    background-color: var(--ta-group-bg-color);
+}
+
+/* だ行 */
+.da_group {
+    background-color: var(--da-group-color);
+}
+
+.da_group:before {
+    border: 1px dashed var(--da-group-color);
+}
+
+/* つ拗音 */
+.tu_sokuon_group {
+    background-color: var(--tu-sokuon-group-color);
+}
+
+.tu_sokuon_group:before {
+    border: 1px dashed var(--tu-sokuon-group-color);
+}
+
+/* な行 */
+.na_group {
+    background-color: var(--na-group-color);
+}
+
+.na_group:before {
+    border: 1px dashed var(--na-group-color);
+}
+
+.na_group:after {
+    background-color: var(--na-group-bg-color);
+}
+
+/* は行 */
+.ha_group {
+    background-color: var(--ha-group-color);
+}
+
+.ha_group:before {
+    border: 1px dashed var(--ha-group-color);
+}
+
+.ha_group:after,
+.ba_group:after,
+.pa_group:after {
+    background-color: var(--ha-group-bg-color);
+}
+
+/* ば行 */
+.ba_group {
+    background-color: var(--ba-group-color);
+}
+
+.ba_group:before {
+    border: 1px dashed var(--ba-group-color);
+}
+
+/* ぱ行 */
+.pa_group {
+    background-color: var(--pa-group-color);
+}
+
+.pa_group:before {
+    border: 1px dashed var(--pa-group-color);
+}
+
+/* ま行 */
+.ma_group {
+    background-color: var(--ma-group-color);
+}
+
+.ma_group:before {
+    border: 1px dashed var(--ma-group-color);
+}
+
+.ma_group:after {
+    background-color: var(--ma-group-bg-color);
+}
+
+/* や行 */
+.ya_group {
+    background-color: var(--ya-group-color);
+}
+
+.ya_group:before {
+    border: 1px dashed var(--ya-group-color);
+}
+
+.ya_group:after,
+.ya_youon_group:after {
+    background-color: var(--ya-group-bg-color);
+}
+
+/* や行拗音 */
+.ya_youon_group {
+    background-color: var(--ya-youon-group-color);
+}
+
+.ya_youon_group:before {
+    border: 1px dashed var(--ya-youon-group-color);
+}
+
+/* ら行 */
+.ra_group {
+    background-color: var(--ra-group-color);
+}
+
+.ra_group:before {
+    border: 1px dashed var(--ra-group-color);
+}
+
+.ra_group:after {
+    background-color: var(--ra-group-bg-color);
+}
+
+/* わ行 */
+.wa_group {
+    background-color: var(--wa-group-color);
+}
+
+.wa_group:before {
+    border: 1px dashed var(--wa-group-color);
+}
+
+.wa_group:after,
+.wa_youon_group:after {
+    background-color: var(--wa-group-bg-color);
+}
+
+/* わ行拗音 */
+.wa_youon_group {
+    background-color: var(--wa-youon-group-color);
+}
+
+.wa_youon_group:before {
+    border: 1px dashed var(--wa-youon-group-color);
+}
+
+/* 長音 */
+.long_vowel_symbol {
+    background-color: var(--long-vowel-symbol-color);
+}
+
+.long_vowel_symbol:before {
+    border: 1px dashed var(--long-vowel-symbol-color);
+}
+
+.long_vowel_symbol:after {
+    background-color: var(--long-vowel-symbol-bg-color);
+}

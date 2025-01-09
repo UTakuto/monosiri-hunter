@@ -61,7 +61,7 @@ export default function Photo() {
 
     return (
         <div className={style.container}>
-            <Arrow />
+            <Arrow backPath="/photography" />
             {photo ? (
                 <div className={style.wrapper}>
                     <div className="imageWrapper">

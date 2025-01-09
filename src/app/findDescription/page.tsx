@@ -14,27 +14,29 @@ export default function Page() {
     };
 
     return (
-        <div onClick={startPhotoGraphy} className={style.findWrapper}>
-            <Arrow />
-            <div className={style.descriptionWrap}>
-                <h1>しらないものをみつけにいこう！</h1>
-            </div>
-            <div className={cameraStyle.characterWrap}>
+        <div>
+            <Arrow backPath="/" />
+            <div onClick={startPhotoGraphy} className={style.findWrapper}>
+                <div className={style.descriptionWrap}>
+                    <h1>しらないものをみつけにいこう！</h1>
+                </div>
+                <div className={cameraStyle.characterWrap}>
+                    <Image
+                        className={style.character}
+                        src="/character.png"
+                        alt="キャラクター"
+                        width={150}
+                        height={150}
+                    />
+                </div>
                 <Image
-                    className={style.character}
-                    src="/character.png"
-                    alt="キャラクター"
-                    width={150}
-                    height={150}
+                    src="/handGesture.png"
+                    alt="タップしてね"
+                    className={cameraStyle.handGestureImg}
+                    width={280}
+                    height={210}
                 />
             </div>
-            <Image
-                src="/handGesture.png"
-                alt="タップしてね"
-                className={cameraStyle.handGestureImg}
-                width={280}
-                height={210}
-            />
         </div>
     );
 }

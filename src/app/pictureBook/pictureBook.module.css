@@ -1,4 +1,31 @@
-/* pictureBook.module.css に追加 */
+.header {
+    width: 20%;
+    height: 20vh;
+}
+
+.container {
+    background-image: url("/book.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    min-height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.contentWrapper {
+    position: relative;
+    z-index: 2;
+    width: 80%;
+    max-width: 1200px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 40px;
+}
+
 .imageContainer {
     width: 100%;
     height: 200px;
@@ -17,7 +44,7 @@
 .wordCard {
     padding: 15px;
     border-radius: 12px;
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.9);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s;
 }

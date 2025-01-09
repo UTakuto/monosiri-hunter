@@ -36,8 +36,6 @@ export default function GameResult() {
     return (
         <div className={style.container}>
             <div className={style.resultContainer}>
-                {/* <div className={style.resultHeader}> */}
-                {/* <Arrow backPath="/game" /> */}
                 {word && (
                     <div className={style.contentWrapper}>
                         <div className={style.wordDisplay}>

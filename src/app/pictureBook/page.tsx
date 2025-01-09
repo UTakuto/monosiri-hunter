@@ -1,12 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { db } from "@/lib/firebase";
-// import { storage } from "@/lib/firebase";
-import { collection, getDocs, orderBy, query } from "firebase/firestore";
-// import { ref, getDownloadURL } from "firebase/storage";
+import "../index.module.css";
+import Style from "@/app/photography/camera.module.css";
 import style from "./pictureBook.module.css";
-
+import Arrow from "@/components/button/arrow/arrow";
+import { db } from "@/lib/firebase";
+import { collection, getDocs, orderBy, query } from "firebase/firestore";
 interface WordData {
     id: string;
     name: string;
@@ -47,33 +47,35 @@ export default function PictureBook() {
     }, []);
 
     return (
-        <div className={style.container}>
+        <>
             <div className={style.header}>
-                <h1 className={style.title}>ことばずかん</h1>
+                <Arrow backPath="/" />
             </div>
-            {loading ? (
-                <p className={style.loading}>よみこみちゅう...</p>
-            ) : (
-                <div className={style.wordsGrid}>
-                    {words.map((word) => (
-                        <div key={word.id} className={style.wordCard}>
-                            {word.imageUrl && (
-                                <div className={style.imageContainer}>
-                                    <Image
-                                        src={word.imageUrl}
-                                        alt={word.name}
-                                        width={300}
-                                        height={300}
-                                        className={style.wordImage}
-                                    />
-                                </div>
-                            )}
-                            <h2 className={style.wordName}>{word.name}</h2>
-                            <p className={style.wordDescription}>{word.description}</p>
-                        </div>
-                    ))}
-                </div>
-            )}
-        </div>
+            <div className={style.container}>
+                {loading ? (
+                    <p className={style.loading}>よみこみちゅう...</p>
+                ) : (
+                    <div className={style.wordsGrid}>
+                        {words.map((word) => (
+                            <div key={word.id} className={style.wordCard}>
+                                {word.imageUrl && (
+                                    <div className={style.imageContainer}>
+                                        <Image
+                                            src={word.imageUrl}
+                                            alt={word.name}
+                                            width={300}
+                                            height={300}
+                                            className={style.wordImage}
+                                        />
+                                    </div>
+                                )}
+                                <h2 className={style.wordName}>{word.name}</h2>
+                                <p className={style.wordDescription}>{word.description}</p>
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
+        </>
     );
 }

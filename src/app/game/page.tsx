@@ -127,7 +127,14 @@ export default function Game() {
                             {Array.from({
                                 length: (gameData?.original?.length || 0) - selectedChars.length,
                             }).map((_, index) => (
-                                <span key={`empty-${index}`} className={style.emptyChar}></span>
+                                <span
+                                    key={`empty-${index}`}
+                                    className={`
+                                        ${style.emptyChar}
+                                        ${style.gameChar} 
+                                        ${style.hiraganaChar}
+                                        `}
+                                ></span>
                             ))}
                         </div>
 

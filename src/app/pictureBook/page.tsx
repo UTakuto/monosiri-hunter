@@ -1,9 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { db, storage } from "@/lib/firebase";
+import { db } from "@/lib/firebase";
+// import { storage } from "@/lib/firebase";
 import { collection, getDocs, orderBy, query } from "firebase/firestore";
-import { ref, getDownloadURL } from "firebase/storage";
+// import { ref, getDownloadURL } from "firebase/storage";
 import style from "./pictureBook.module.css";
 
 interface WordData {

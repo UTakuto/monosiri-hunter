@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getStorage } from "firebase/storage";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, collection, addDoc } from "firebase/firestore";
 
 const firebaseConfig = {
     apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -18,3 +18,8 @@ const app = initializeApp(firebaseConfig);
 export const storage = getStorage(app); // 追加
 export const db = getFirestore(app);
 // const analytics = getAnalytics(app);
+
+export async function addWord(data) {
+    const wordsRef = collection(db, "words");
+    return addDoc(wordsRef, data);
+}

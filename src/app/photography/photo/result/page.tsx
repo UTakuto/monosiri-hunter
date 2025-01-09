@@ -3,6 +3,8 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import style from "../../camera.module.css";
 import Arrow from "@/components/button/arrow/arrow";
+import gameStyle from "@/app/game/game.module.css";
+import { getCharacterRow } from "@/utils/getCharacterRow";
 
 interface AnalysisResult {
     name: string; // 名前のみを保存
@@ -102,15 +104,6 @@ export default function Result() {
             style={{ cursor: "pointer" }}
         >
             <div className={style.header}>
-                {/* <button
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            router.push("/photography");
-                            }}
-                            className="mt-4 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-                            >
-                            もどる
-                            </button> */}
                 <Arrow />
                 <p className={style.headerText}>これは、</p>
             </div>
@@ -121,7 +114,15 @@ export default function Result() {
                     <h1 className={style.resultText}>
                         {/* 名前のみを一文字ずつ表示 */}
                         {result.name.split("").map((char, index) => (
-                            <span key={index}>{char}</span>
+                            <button
+                                key={index}
+                                className={`
+                                    ${gameStyle.hiraganaChar}
+                                    ${gameStyle[getCharacterRow(char)]}
+                                `}
+                            >
+                                {char}
+                            </button>
                         ))}
                     </h1>
                     {/* 説明文を別途表示 */}

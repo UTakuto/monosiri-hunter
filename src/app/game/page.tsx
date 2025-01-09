@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import style from "./game.module.css";
-import Register from "@/components/register/register";
 import { getCharacterRow } from "@/utils/getCharacterRow";
 import Arrow from "@/components/button/arrow/arrow";
 
@@ -15,7 +14,6 @@ export default function Game() {
     const router = useRouter();
     const [gameData, setGameData] = useState<GameData | null>(null);
     const [selectedChars, setSelectedChars] = useState<string[]>([]);
-    const [showRegister, setShowRegister] = useState(false);
 
     useEffect(() => {
         let mounted = true;
@@ -57,7 +55,7 @@ export default function Game() {
             newSelectedChars.length === gameData?.original.length &&
             newSelectedChars.join("") === gameData?.original
         ) {
-            setShowRegister(true);
+            handleSubmit();
         }
     };
 
@@ -87,6 +85,7 @@ export default function Game() {
                             key={index}
                             className={`
                                         ${style.hiraganaChar}
+                                        ${style.gamePlayChar}
                                         ${style.gameChar} 
                                         ${style[getCharacterRow(char)]}
                                     `}
@@ -107,7 +106,7 @@ export default function Game() {
                     ))}
                 </div>
             </div>
-            <div className={style.resultContainer}>
+            <div className={style.gameResultContainer}>
                 <div className={style.gameSelectContainer}>
                     {/* 選択可能な文字 */}
                     <div className={style.gameText}>
@@ -116,6 +115,7 @@ export default function Game() {
                                 key={index}
                                 className={`
                                         ${style.hiraganaChar} 
+                                        ${style.gamePlayChar}
                                         ${selectedChars.includes(char) ? style.usedChar : ""}
                                         ${style[getCharacterRow(char)]}
                                     `}
@@ -155,9 +155,6 @@ export default function Game() {
                     </div>
                 </div>
             </div>
-            {showRegister && gameData?.original && (
-                <Register word={gameData.original} onClose={() => setShowRegister(false)} />
-            )}
         </div>
     );
 }

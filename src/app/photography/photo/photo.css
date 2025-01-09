@@ -30,14 +30,14 @@
 
 .proceedBorder {
     margin: auto;
-    padding: 15px 25px;
+    padding: 10px 25px;
     border: 2px dashed #ffe681;
     border-radius: 6px;
 }
 
 .backBorder {
     margin: auto;
-    padding: 15px 38px;
+    padding: 8px 38px;
     border: 2px dashed #ff7530;
     border-radius: 6px;
 }

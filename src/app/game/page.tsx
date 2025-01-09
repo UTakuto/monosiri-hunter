@@ -1,8 +1,9 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import style from "./game.module.css";
 import { getCharacterRow } from "@/utils/getCharacterRow";
+import { shuffle } from "@/utils/shuffle";
+import style from "./game.module.css";
 import Arrow from "@/components/button/arrow/arrow";
 
 interface GameData {
@@ -10,10 +11,19 @@ interface GameData {
     shuffled: string[];
 }
 
+interface AnalysisResult {
+    name: string;
+}
+
 export default function Game() {
     const router = useRouter();
     const [gameData, setGameData] = useState<GameData | null>(null);
     const [selectedChars, setSelectedChars] = useState<string[]>([]);
+    const [result, setResult] = useState<AnalysisResult | null>(null);
+
+    const shuffledChars = useMemo(() => {
+        return shuffle(gameData?.shuffled || []);
+    }, [gameData?.shuffled]);
 
     useEffect(() => {
         let mounted = true;
@@ -109,16 +119,17 @@ export default function Game() {
             <div className={style.gameResultContainer}>
                 <div className={style.gameSelectContainer}>
                     {/* 選択可能な文字 */}
+
                     <div className={style.gameText}>
-                        {gameData?.shuffled.map((char, index) => (
+                        {shuffledChars.map((char, index) => (
                             <button
-                                key={index}
+                                key={`${char}-${index}`}
                                 className={`
-                                        ${style.hiraganaChar} 
-                                        ${style.gamePlayChar}
-                                        ${selectedChars.includes(char) ? style.usedChar : ""}
-                                        ${style[getCharacterRow(char)]}
-                                    `}
+                            ${style.hiraganaChar} 
+                            ${style.gamePlayChar}
+                            ${selectedChars.includes(char) ? style.usedChar : ""}
+                            ${style[getCharacterRow(char)]}
+                        `}
                                 onClick={() => handleCharClick(char)}
                                 disabled={selectedChars.includes(char)}
                             >

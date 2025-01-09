@@ -1,6 +1,8 @@
 "use client";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { getCharacterRow } from "@/utils/getCharacterRow";
+import { SuccessModal } from "@/components/modal/SuccessModal";
 import { addWord } from "@/lib/firebase";
 import style from "../game.module.css";
 
@@ -10,6 +12,7 @@ export default function GameResult() {
     const description = localStorage.getItem("description");
     const savedData = localStorage.getItem("analysisTarget");
     const imageUrl = savedData ? JSON.parse(savedData).imageUrl : null;
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleRegister = async () => {
         if (!word || !description || !imageUrl) return;
@@ -21,8 +24,7 @@ export default function GameResult() {
                 imageUrl,
                 createdAt: new Date(),
             });
-            alert("うばわれたものをとりかえせたよ！");
-            router.push("/pictureBook");
+            setIsModalOpen(true); // モーダルを表示
         } catch (error) {
             console.error("登録エラー:", error);
             alert("登録に失敗しました。");
@@ -67,6 +69,13 @@ export default function GameResult() {
                     </button>
                 </div>
             </div>
+            <SuccessModal
+                isOpen={isModalOpen}
+                onClose={() => {
+                    setIsModalOpen(false);
+                    router.push("/pictureBook");
+                }}
+            />
         </div>
     );
 }

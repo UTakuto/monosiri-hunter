@@ -82,7 +82,8 @@
 }
 
 .descriptionText {
-    padding: 10px;
+    padding-top: 20px;
+    /* padding: 10px; */
     font-size: 20px;
 }
 
@@ -114,10 +115,10 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: 180px;
+        width: 185px;
         height: 35px;
         border: dashed 2px #ff7530;
-        border-radius: 10px;
+        border-radius: 6px;
     }
 }
 

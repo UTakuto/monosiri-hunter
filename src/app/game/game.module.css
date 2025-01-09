@@ -1,17 +1,150 @@
+.header {
+    height: 40vh;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+
 .undoButton {
     text-align: center;
     margin-top: 10px;
 }
 
-.hiraganaChar {
+.selectedContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    padding: 10px;
+}
+
+.selectedChar {
     width: 70px;
     height: 100px;
     font-size: 50px;
     padding: 10px;
     margin: 5px;
+    border: solid 3px #c8c8c8;
+    border-radius: 7px;
+    background-color: #ffffff;
+}
+
+.hiraganaChar {
+    width: 70px;
+    height: 100px;
+    font-size: 40px;
+    padding: 10px;
+    margin: 5px;
+    border: none;
+    border-radius: 7px;
+    text-align: center;
+    line-height: 80px;
+    background-color: #ffffff;
+}
+
+/* .hiraganaResultChar {
+    width: 90px;
+    height: 120px;
+    font-size: 40px;
+    padding: 10px;
+    margin: 5px;
     border: none;
     border-radius: 7px;
     background-color: #ffffff;
+} */
+
+.gameSelectContainer {
+    height: 60vh;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.gameText {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.successChars {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    line-height: 80px;
+    gap: 10px;
+}
+
+.buttonContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.gameSubmitButton {
+    position: relative;
+    width: 175px;
+    height: 70px;
+    padding: 10px;
+    color: hsl(0, 0%, 100%);
+    font-size: 24px;
+    border: none;
+    border-radius: 10px;
+    background-color: #ff7530;
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.25) inset;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+.gameSubmitButton:before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 160px;
+    height: 55px;
+    border: dashed 2px #ffe681;
+    border-radius: 10px;
+}
+
+.gameBackButton {
+    position: relative;
+    width: 175px;
+    height: 70px;
+    padding: 10px;
+    color: #39190a;
+    font-size: 24px;
+    border: none;
+    border-radius: 10px;
+    background-color: #fffae6;
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.25) inset;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+.gameBackButton:before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 160px;
+    height: 55px;
+    border: dashed 2px #ff7530;
+    border-radius: 10px;
+}
+
+.gameBackButton:disabled {
+    background-color: #cbd5e0;
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.gameSubmitButton:disabled {
+    background-color: #cbd5e0;
+    cursor: not-allowed;
+    opacity: 0.5;
 }
 
 .a_group,

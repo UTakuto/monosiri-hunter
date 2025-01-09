@@ -45,10 +45,6 @@
     display: flex;
     justify-content: start;
     align-items: center;
-    /* border: solid 1px #ff7530; */
-    /* width: 40%;
-    padding: 40px 0 0 40px;
-    */
 }
 
 .headerText {
@@ -61,7 +57,7 @@
 
 .resultContents {
     width: 100%;
-    height: 80vh;
+    height: 55vh;
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -70,7 +66,8 @@
 }
 
 .resultText {
-    display: block;
+    display: flex;
+    gap: 20px;
     font-size: 60px;
     text-align: center;
 }
@@ -82,6 +79,46 @@
     align-items: center;
     font-size: 80px;
     font-weight: bold;
+}
+
+.descriptionText {
+    padding: 10px;
+    font-size: 20px;
+}
+
+.reAnalyzeWrap {
+    width: 100%;
+    height: 25vh;
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    gap: 20px;
+}
+
+.reAnalyzeButton {
+    position: relative;
+    width: 200px;
+    height: 50px;
+    padding: 10px;
+    color: #39190a;
+    font-size: 18px;
+    border: none;
+    border-radius: 10px;
+    background-color: #fffae6;
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.25) inset;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+
+    &::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 180px;
+        height: 35px;
+        border: dashed 2px #ff7530;
+        border-radius: 10px;
+    }
 }
 
 .cropBorder {

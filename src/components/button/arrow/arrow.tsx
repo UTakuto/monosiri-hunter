@@ -1,20 +1,28 @@
 "use client";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import "./arrow.css";
 
-export default function Arrow() {
+interface ArrowProps {
+    backPath: string;
+}
+
+export default function Arrow({ backPath }: ArrowProps) {
     const router = useRouter();
 
-    const pathname = usePathname();
-
     const handleBack = () => {
-        const currentPath = pathname;
-        if (currentPath) {
-            const parentPath = currentPath.substring(0, currentPath.lastIndexOf("/")) || "/";
-            router.push(parentPath);
-        } else {
-            console.log("現在のパスが取得できません");
+        try {
+            // パスが undefined または null の場合のフォールバック
+            const validPath = backPath || "/";
+
+            // パスが '/' で始まることを確認
+            const normalizedPath = validPath.startsWith("/") ? validPath : `/${validPath}`;
+
+            router.push(normalizedPath);
+        } catch (error) {
+            console.error("Navigation error:", error);
+            // エラー時はホームにリダイレクト
+            router.push("/");
         }
     };
 

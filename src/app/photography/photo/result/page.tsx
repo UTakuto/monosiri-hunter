@@ -168,6 +168,7 @@ export default function Result() {
                                     key={index}
                                     className={`
                                         ${gameStyle.hiraganaChar}
+                                        ${gameStyle.resultChar}
                                         ${gameStyle[getCharacterRow(char)]}
                                     `}
                                 >

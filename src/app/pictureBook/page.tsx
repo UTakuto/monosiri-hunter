@@ -6,7 +6,7 @@ import Style from "@/app/photography/camera.module.css";
 import style from "./pictureBook.module.css";
 import Arrow from "@/components/button/arrow/arrow";
 import { db } from "@/lib/firebase";
-import { collection, getDocs, orderBy, query } from "firebase/firestore";
+import { getDocs, collection, query, orderBy } from "firebase/firestore";
 interface WordData {
     id: string;
     word: string;

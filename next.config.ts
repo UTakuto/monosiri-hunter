@@ -5,9 +5,9 @@ const nextConfig = {
         return config;
     },
     // 実験的な機能を有効化
-    experimental: {
-        optimizeCss: true,
-    },
+    // experimental: {
+    //     optimizeCss: true,
+    // },
     images: {
         remotePatterns: [
             {

@@ -48,7 +48,7 @@ export async function cropImageWithVisionAPI(
             },
         ],
     };
-
+    console.log(corners);
     try {
         const response = await fetch(endpoint, {
             method: "POST",

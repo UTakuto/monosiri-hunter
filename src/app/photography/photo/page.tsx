@@ -26,17 +26,10 @@ export default function Photo() {
 
         try {
             setUploading(true);
-
-            const getPhotoUrl = async (path: string) => {
-                const reference = ref(storage, path);
-                const url = await getDownloadURL(reference);
-                return url;
-            };
-
             // 画像を圧縮
             const compressedImage = await convertToWebP(photo);
 
-            // Firebase Storageにアップロード
+            // Firebase Storageにップロード
             const response = await fetch(compressedImage);
             const blob = await response.blob();
             const fileName = `photos/${Date.now()}.webp`; // 拡張子をwebpに変更

@@ -3,36 +3,28 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { getCharacterRow } from "@/utils/getCharacterRow";
 import { SuccessModal } from "@/components/modal/SuccessModal";
-import { db } from "@/lib/firebase";
-import { collection, addDoc } from "firebase/firestore";
+import { addWord } from "@/components/Word/AddWord";
 import style from "../game.module.css";
-
-interface WordData {
-    word: string;
-    description: string;
-    imageUrl: string;
-    createdAt: Date;
-}
-
-export const addWord = async (data: WordData) => {
-    try {
-        const docRef = await addDoc(collection(db, "words"), data);
-        return docRef.id;
-    } catch (error) {
-        console.error("Error adding document: ", error);
-        throw error;
-    }
-};
 
 export default function GameResult() {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const word = localStorage.getItem("wordToRegister");
-    const description = localStorage.getItem("description");
-    const savedData = localStorage.getItem("analysisTarget");
-    const imageUrl = savedData ? JSON.parse(savedData).imageUrl : null;
+    const [word, setWord] = useState<string | null>(null);
+    const [description, setDescription] = useState<string | null>(null);
+    const [imageUrl, setImageUrl] = useState<string | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    useEffect(() => {
+        // クライアントサイドでのみデータを取得
+        setWord(localStorage.getItem("wordToRegister"));
+        setDescription(localStorage.getItem("description"));
+        const savedData = localStorage.getItem("analysisTarget");
+        if (savedData) {
+            const parsed = JSON.parse(savedData);
+            setImageUrl(parsed.imageUrl);
+        }
+    }, []);
 
     const handleRegister = async () => {
         if (!word || !description || !imageUrl) {
@@ -61,6 +53,7 @@ export default function GameResult() {
         } catch (err) {
             console.error("登録エラー:", err);
             setError("しっぱいしました。もういちどやりなおしてください。");
+            console.log("登録エラー:", error);
         } finally {
             setLoading(false);
         }
@@ -78,6 +71,7 @@ export default function GameResult() {
 
     const handleBack = () => {
         router.push("/game"); // ホームへ戻る
+        console.log(loading);
     };
 
     return (

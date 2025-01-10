@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import "../index.module.css";
-import Style from "@/app/photography/camera.module.css";
 import style from "./pictureBook.module.css";
 import Arrow from "@/components/button/arrow/arrow";
 import { db } from "@/lib/firebase";

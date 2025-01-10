@@ -11,15 +11,10 @@ interface GameData {
     shuffled: string[];
 }
 
-interface AnalysisResult {
-    name: string;
-}
-
 export default function Game() {
     const router = useRouter();
     const [gameData, setGameData] = useState<GameData | null>(null);
     const [selectedChars, setSelectedChars] = useState<string[]>([]);
-    const [result, setResult] = useState<AnalysisResult | null>(null);
 
     const shuffledChars = useMemo(() => {
         return shuffle(gameData?.shuffled || []);

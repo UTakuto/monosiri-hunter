@@ -83,7 +83,7 @@ export default function Photography() {
     return (
         <>
             <div className={style.controls}>
-                <Arrow />
+                <Arrow backPath="/" />
             </div>
             <div
                 className={style.photoContainer}

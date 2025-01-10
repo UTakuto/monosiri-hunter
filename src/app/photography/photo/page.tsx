@@ -14,6 +14,12 @@ export default function Photo() {
     const [photo, setPhoto] = useState<string | null>(null);
     const [uploading, setUploading] = useState(false);
 
+    const getPhotoUrl = async (path: string) => {
+        const reference = ref(storage, path);
+        const url = await getDownloadURL(reference);
+        return url;
+    };
+
     useEffect(() => {
         const photoData = localStorage.getItem("photoUrl");
         if (photoData) {

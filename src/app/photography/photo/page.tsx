@@ -1,12 +1,12 @@
 "use client";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "@/lib/firebase";
 import { convertToWebP } from "@/utils/photoResizer";
+import { useEffect, useState } from "react";
+import Image from "next/image";
 import Arrow from "@/components/button/arrow/arrow";
-import style from "../../index.module.css";
+import style from "@/app/pictureBook/pictureBook.module.css";
 import "./photo.css";
 
 export default function Photo() {

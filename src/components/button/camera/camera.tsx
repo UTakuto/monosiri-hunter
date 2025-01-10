@@ -8,14 +8,14 @@ export default function Camera() {
 
     const startCamera = () => {
         // カメラプレビュー用のページに遷移
-        router.push("./photography");
+        router.push("./findDescription");
     };
 
     return (
         <div className={style.cameraCompoWrap}>
             <div className={style.buttonBox}>
                 <button className={style.cameraButton} onClick={startCamera}>
-                    <span className={style.border}>しらべる</span>
+                    <span className={style.border}>みつける</span>
                     <Image
                         className={style.searchPicture}
                         src="/searchImage.png"

@@ -1,3 +1,41 @@
+:root {
+    --a-group-color: #c45959;
+    --ka-group-color: #ea8e51;
+    --sa-group-color: #eace51;
+    --ta-group-color: #c6ea51;
+    --na-group-color: #51ea5b;
+    --ha-group-color: #51eaad;
+    --ma-group-color: #51ceea;
+    --ya-group-color: #5172ea;
+    --ra-group-color: #b751ea;
+    --wa-group-color: #eea2ad;
+    --long-vowel-symbol-color: #757575;
+    --a-group-bg-color: #ffefef;
+    --ka-group-bg-color: #fff5ef;
+    --sa-group-bg-color: #fdffef;
+    --ta-group-bg-color: #faffef;
+    --na-group-bg-color: #effff1;
+    --ha-group-bg-color: #effeff;
+    --ma-group-bg-color: #eff6ff;
+    --ya-group-bg-color: #ffefff;
+    --ra-group-bg-color: #ffeffd;
+    --wa-group-bg-color: #ffefff;
+    --long-vowel-symbol-bg-color: #f9f9f9;
+    --ga-group-color: #ba794d;
+    --za-group-color: #cbba6b;
+    --da-group-color: #a7bc60;
+    --ba-group-color: #2a9369;
+    --pa-group-color: #89a69b;
+    --a-youon-group-color: #f59c9c;
+    --ya-youon-group-color: #6572bb;
+    --wa-youon-group-color: #ee7ab7;
+    --tu-sokuon-group-color: #677f18;
+    --a-youon-group-bg-color: var(--a-group-bg-color);
+    --ya-youon-group-bg-color: var(--ya-group-bg-color);
+    --wa-youon-group-bg-color: var(--wa-group-bg-color);
+    --tu-sokuon-group-bg-color: var(--ta-group-bg-color);
+}
+
 html,
 body {
     max-width: 100vw;
@@ -9,6 +47,9 @@ body {
 }
 
 body {
+    font-family: "Sawarabi Gothic", serif;
+    font-weight: 400;
+    font-style: normal;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     /* background-color: #fffae6; */
@@ -28,4 +69,20 @@ body {
 a {
     color: inherit;
     text-decoration: none;
+}
+
+h1,
+h2,
+h3,
+h4 {
+    font-family: "Noto Sans JP", serif;
+    font-weight: 600;
+}
+
+p,
+a,
+span,
+button {
+    font-family: "Noto Sans JP", serif;
+    font-weight: 500;
 }

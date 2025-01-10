@@ -1,20 +1,29 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
+import { getCharacterRow } from "@/utils/getCharacterRow";
+import { shuffle } from "@/utils/shuffle";
 import style from "./game.module.css";
-import Register from "@/components/register/register";
+import Arrow from "@/components/button/arrow/arrow";
 
 interface GameData {
     original: string;
     shuffled: string[];
 }
 
+interface AnalysisResult {
+    name: string;
+}
+
 export default function Game() {
     const router = useRouter();
     const [gameData, setGameData] = useState<GameData | null>(null);
     const [selectedChars, setSelectedChars] = useState<string[]>([]);
-    const [isCorrect, setIsCorrect] = useState(false);
-    const [showRegister, setShowRegister] = useState(false);
+    const [result, setResult] = useState<AnalysisResult | null>(null);
+
+    const shuffledChars = useMemo(() => {
+        return shuffle(gameData?.shuffled || []);
+    }, [gameData?.shuffled]);
 
     useEffect(() => {
         let mounted = true;
@@ -56,7 +65,7 @@ export default function Game() {
             newSelectedChars.length === gameData?.original.length &&
             newSelectedChars.join("") === gameData?.original
         ) {
-            setIsCorrect(true);
+            handleSubmit();
         }
     };
 
@@ -68,100 +77,95 @@ export default function Game() {
         setSelectedChars(newSelectedChars);
     };
 
-    const resetGame = () => {
-        setSelectedChars([]);
-        setIsCorrect(false);
-    };
-
-    const goToRegister = () => {
-        setShowRegister(true);
+    const handleSubmit = () => {
+        if (gameData && selectedChars.join("") === gameData.original) {
+            localStorage.setItem("wordToRegister", gameData.original);
+            router.push("/game/result");
+        }
     };
 
     return (
         <div className={style.container}>
             <div className={style.header}>
-                <button
-                    onClick={() => router.push("/photography")}
-                    className="mt-4 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-                >
-                    もどる
-                </button>
-                <h1 className={style.headerText}>ならびかえよう！</h1>
+                <Arrow backPath="/photography/photo/result" />
+                {/* 選択中の文字 */}
+                <div className={style.selectedContainer}>
+                    {selectedChars.map((char, index) => (
+                        <p
+                            key={index}
+                            className={`
+                                        ${style.hiraganaChar}
+                                        ${style.gamePlayChar}
+                                        ${style.gameChar} 
+                                        ${style[getCharacterRow(char)]}
+                                    `}
+                        >
+                            {char}
+                        </p>
+                    ))}
+                    {Array.from({
+                        length: (gameData?.original?.length || 0) - selectedChars.length,
+                    }).map((_, index) => (
+                        <p
+                            key={`empty-${index}`}
+                            className={`
+                                        ${style.emptyChar}
+                                        ${style.selectedChar}
+                                    `}
+                        ></p>
+                    ))}
+                </div>
             </div>
-            <div className={style.resultContainer}>
-                {isCorrect ? (
-                    <div className={style.successContainer}>
-                        {/* 正解後の画面 */}
-                        <div className={style.successChars}>
-                            {gameData?.original.split("").map((char, index) => (
-                                <span key={index} className={style.finalChar}>
-                                    {char}
-                                </span>
-                            ))}
-                        </div>
-                        <div className={style.successActions}>
-                            <button
-                                className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600"
-                                onClick={resetGame}
-                            >
-                                もういっかい
-                            </button>
-                            <button
-                                className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 ml-4"
-                                onClick={goToRegister}
-                            >
-                                とうろく
-                            </button>
-                        </div>
-                    </div>
-                ) : (
-                    <div>
-                        {/* 選択中の文字 */}
-                        <div className={style.selectedContainer}>
-                            {selectedChars.map((char, index) => (
-                                <span key={index} className={style.selectedChar}>
-                                    {char}
-                                </span>
-                            ))}
-                            {Array.from({
-                                length: (gameData?.original?.length || 0) - selectedChars.length,
-                            }).map((_, index) => (
-                                <span key={`empty-${index}`} className={style.emptyChar}></span>
-                            ))}
-                        </div>
+            <div className={style.gameResultContainer}>
+                <div className={style.gameSelectContainer}>
+                    {/* 選択可能な文字 */}
 
-                        {/* 「一文字戻る」ボタン */}
-                        <div className={style.undoButton}>
+                    <div className={style.gameText}>
+                        {shuffledChars.map((char, index) => (
                             <button
-                                onClick={handleUndo}
-                                className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 mt-4"
-                                disabled={selectedChars.length === 0}
+                                key={`${char}-${index}`}
+                                className={`
+                            ${style.hiraganaChar} 
+                            ${style.gamePlayChar}
+                            ${selectedChars.includes(char) ? style.usedChar : ""}
+                            ${style[getCharacterRow(char)]}
+                        `}
+                                onClick={() => handleCharClick(char)}
+                                disabled={selectedChars.includes(char)}
                             >
-                                ひとつもどる
+                                {char}
                             </button>
-                        </div>
-
-                        {/* 選択可能な文字 */}
-                        <div className={style.gameText}>
-                            {gameData?.shuffled.map((char, index) => (
-                                <button
-                                    key={index}
-                                    className={`${style.gameChar} ${
-                                        selectedChars.includes(char) ? style.usedChar : ""
-                                    }`}
-                                    onClick={() => handleCharClick(char)}
-                                    disabled={selectedChars.includes(char)}
-                                >
-                                    {char}
-                                </button>
-                            ))}
-                        </div>
+                        ))}
                     </div>
-                )}
+                    {/* 「一文字戻る」ボタン */}
+                    <div className={style.buttonContainer}>
+                        <button
+                            onClick={handleUndo}
+                            className={`
+                                ${style.gameBackButton}
+                                ${selectedChars.length === 0 ? style.gameBackButtonDisabled : ""}
+                                `}
+                            disabled={selectedChars.length === 0}
+                        >
+                            ひとつけす
+                        </button>
+                        <button
+                            onClick={handleSubmit}
+                            className={`
+                                ${style.gameSubmitButton}
+                                ${
+                                    selectedChars.length !== gameData?.original.length
+                                        ? style.gameSubmitButtonDisabled
+                                        : ""
+                                }
+                                `}
+                            disabled={selectedChars.length !== gameData?.original.length}
+                        >
+                            かんせい
+                        </button>
+                    </div>
+                </div>
             </div>
-            {showRegister && gameData?.original && (
-                <Register word={gameData.original} onClose={() => setShowRegister(false)} />
-            )}
         </div>
     );
 }

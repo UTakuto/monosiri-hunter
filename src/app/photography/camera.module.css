@@ -28,12 +28,12 @@
     width: 100%;
     height: 100%;
     margin: auto;
-    padding: 20px 33px;
+    padding: 10px 30px;
     border: 2px dashed #ffe681;
     border-radius: 6px;
 }
 
-.container {
+.resultContainer {
     width: 100%;
     height: 100vh;
     display: flex;
@@ -41,21 +41,23 @@
 }
 
 .header {
-    width: 40%;
-    padding: 40px 0 0 40px;
+    height: 20vh;
     display: flex;
-    justify-content: space-around;
+    justify-content: start;
     align-items: center;
 }
 
 .headerText {
+    display: inline;
+    height: 100%;
     font-size: 40px;
     font-weight: bold;
+    padding-top: 50px;
 }
 
-.resultContainer {
+.resultContents {
     width: 100%;
-    height: 100%;
+    height: 55vh;
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -64,7 +66,9 @@
 }
 
 .resultText {
-    font-size: 80px;
+    display: flex;
+    gap: 20px;
+    font-size: 60px;
     text-align: center;
 }
 
@@ -77,6 +81,47 @@
     font-weight: bold;
 }
 
+.descriptionText {
+    padding-top: 20px;
+    /* padding: 10px; */
+    font-size: 20px;
+}
+
+.reAnalyzeWrap {
+    width: 100%;
+    height: 25vh;
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    gap: 20px;
+}
+
+.reAnalyzeButton {
+    position: relative;
+    width: 200px;
+    height: 50px;
+    padding: 10px;
+    color: #39190a;
+    font-size: 18px;
+    border: none;
+    border-radius: 10px;
+    background-color: #fffae6;
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.25) inset;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+
+    &::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 185px;
+        height: 35px;
+        border: dashed 2px #ff7530;
+        border-radius: 6px;
+    }
+}
+
 .cropBorder {
     position: absolute;
     top: 50%;
@@ -86,4 +131,133 @@
     height: 300px;
     border: 2px solid #ff7530;
     z-index: 10;
+}
+
+.photoContainer {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #000;
+}
+
+.video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.canvas {
+    display: none;
+}
+
+.controls {
+    position: absolute;
+    top: 10px;
+    z-index: 10; /* ボタン類を前面に表示 */
+    width: 20%;
+}
+
+.handGestureImg {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+
+.characterWrap {
+    position: absolute;
+    bottom: 10px;
+    left: 40px;
+    width: 130px;
+    height: 200px;
+}
+
+.additionalLine {
+    position: absolute;
+    width: 350px;
+    height: 350px;
+    border: solid 1px #fefefe;
+    box-shadow: 0px 0px 5px 3px rgba(255, 255, 255, 0.8);
+}
+
+.firstFrame,
+.secondFrame {
+    position: absolute;
+    width: 280px;
+    height: 280px;
+}
+
+.firstFrame::before,
+.firstFrame::after,
+.secondFrame::before,
+.secondFrame::after {
+    content: "";
+    position: absolute;
+    width: 50px; /* 線の長さ */
+    height: 50px; /* 線の長さ */
+    border: 2px solid #fefefe; /* 線の色 */
+    box-sizing: border-box;
+}
+
+.firstFrame::before {
+    top: 0;
+    left: 0;
+    border-width: 2px 0 0 2px; /* 上左 */
+}
+
+.firstFrame::after {
+    bottom: 0;
+    right: 0;
+    border-width: 0 2px 2px 0; /* 右下 */
+}
+
+.secondFrame::before {
+    top: 0;
+    right: 0;
+    border-width: 2px 2px 0 0; /* 上右 */
+}
+
+.secondFrame::after {
+    bottom: 0;
+    left: 0;
+    border-width: 0 0 2px 2px; /* 下左 */
+}
+
+.centerLine {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+}
+
+.centerLine::before,
+.centerLine::after {
+    content: "";
+    position: absolute;
+    width: 2px; /* 線の太さ */
+    height: 50px; /* 線の長さ */
+    background-color: #fefefe; /* 線の色 */
+}
+
+.centerLine::before {
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.centerLine::after {
+    right: 50%;
+    transform: translateX(50%);
+    rotate: 90deg;
+}
+
+.error {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(170, 0, 0, 0.8);
+    color: #fefefe;
+    padding: 10px;
+    border-radius: 5px;
 }

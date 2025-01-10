@@ -1,12 +1,25 @@
 "use client";
 import { useRef, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { takePhoto } from "@/utils/takePhoto";
+import { getAdditionalLinePosition } from "@/utils/position";
+import { handlePhotoCapture } from "@/utils/handlePhotoCapture";
+import style from "./camera.module.css";
+import Image from "next/image";
+import Arrow from "@/components/button/arrow/arrow";
 
 export default function Photography() {
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
+    const additionalLineRef = useRef<HTMLDivElement | null>(null);
     const router = useRouter();
     const [error, setError] = useState<string | null>(null);
+
+    // 写真撮影とクロップ処理
+    const handleCapture = async () => {
+        const corners = getAdditionalLinePosition(additionalLineRef);
+        await handlePhotoCapture(canvasRef, corners);
+    };
 
     useEffect(() => {
         const videoElement = videoRef.current;
@@ -48,95 +61,52 @@ export default function Photography() {
         };
     }, []);
 
-    const takePhoto = async () => {
-        if (!videoRef.current || !canvasRef.current) {
-            setError("カメラが起動していません");
-            return;
-        }
+    useEffect(() => {
+        const detectBrightness = () => {
+            if (!videoRef.current || !canvasRef.current) return;
 
-        try {
             const video = videoRef.current;
             const canvas = canvasRef.current;
             const context = canvas.getContext("2d");
 
-            if (!context) {
-                throw new Error("Canvas contextの取得に失敗しました");
-            }
+            if (!context || video.videoWidth === 0 || video.videoHeight === 0) return;
 
-            // キャンバスサイズをビデオサイズに合わせる
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        };
 
-            // ビデオフレームをキャンバスに描画
-            context.drawImage(video, 0, 0);
-
-            // 画像をBlobに変換
-            const blob = await new Promise<Blob>((resolve, reject) => {
-                canvas.toBlob(
-                    (blob) => {
-                        if (blob) {
-                            resolve(blob);
-                        } else {
-                            reject(new Error("画像の生成に失敗しました"));
-                        }
-                    },
-                    "image/jpeg",
-                    0.95
-                );
-            });
-
-            const url = URL.createObjectURL(blob);
-            localStorage.setItem("photoUrl", url);
-            router.push("./photography/photo");
-        } catch (err) {
-            const errorMessage = err instanceof Error ? err.message : "写真の撮影に失敗しました";
-            setError(errorMessage);
-        }
-    };
+        const interval = setInterval(detectBrightness, 1000);
+        return () => clearInterval(interval);
+    }, []);
 
     return (
-        <div style={{ position: "relative", width: "100%", height: "100vh" }}>
-            <video
-                ref={videoRef}
-                style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                }}
-                playsInline
-                autoPlay
-                muted
-            />
-            <canvas ref={canvasRef} style={{ display: "none" }} />
+        <>
+            <div className={style.controls}>
+                <Arrow />
+            </div>
             <div
-                style={{
-                    position: "absolute",
-                    bottom: "20px",
-                    width: "100%",
-                    display: "flex",
-                    justifyContent: "center",
-                    gap: "10px",
+                className={style.photoContainer}
+                onClick={() => {
+                    handleCapture();
+                    takePhoto(videoRef, canvasRef, additionalLineRef, setError, router);
                 }}
             >
-                <button onClick={takePhoto}>撮影</button>
-                <button onClick={() => router.push("/")}>戻る</button>
+                <div ref={additionalLineRef} className={style.additionalLine}></div>
+                <div className={style.firstFrame}></div>
+                <div className={style.secondFrame}></div>
+                <div className={style.centerLine}></div>
+                <video ref={videoRef} className={style.video} playsInline autoPlay muted />
+                <canvas ref={canvasRef} className={style.canvas} />
+                <Image
+                    src="/handGesture.png"
+                    alt="タップしてね"
+                    className={style.handGestureImg}
+                    width={280}
+                    height={210}
+                />
+                {error && <div className={style.error}>{error}</div>}
             </div>
-            {error && (
-                <div
-                    style={{
-                        position: "absolute",
-                        top: "20px",
-                        left: "50%",
-                        transform: "translateX(-50%)",
-                        backgroundColor: "rgba(170, 0, 0, 0.8)",
-                        color: "white",
-                        padding: "10px",
-                        borderRadius: "5px",
-                    }}
-                >
-                    {error}
-                </div>
-            )}
-        </div>
+        </>
     );
 }

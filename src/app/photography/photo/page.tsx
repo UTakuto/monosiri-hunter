@@ -61,16 +61,22 @@ export default function Photo() {
 
     return (
         <div className={style.container}>
-            < Arrow />
+            <Arrow backPath="/photography" />
             {photo ? (
                 <div className={style.wrapper}>
                     <div className="imageWrapper">
-                        <Image src={photo} alt="撮影した写真" width={330} height={330} />
+                        <Image
+                            className="takeImage"
+                            src={photo}
+                            alt="撮影した写真"
+                            width={330}
+                            height={330}
+                        />
                     </div>
                     <div className={style.btnWrap}>
                         <h2>このしゃしんでいいかな？</h2>
                         <button className="proceedBtn" onClick={handleUpload} disabled={uploading}>
-                            <span className="border">
+                            <span className="proceedBorder">
                                 {uploading ? "まってね" : "いいよ！"}
                             </span>
                         </button>

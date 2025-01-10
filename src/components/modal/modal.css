@@ -22,8 +22,11 @@
 
 .button {
     margin-top: 1rem;
-    padding: 0.5rem 2rem;
-    background-color: #4caf50;
+    width: 100px;
+    height: 40px;
+    background-color: #ff7530;
+    line-height: 30px;
+    font-size: 14px;
     color: white;
     border: none;
     border-radius: 6px;

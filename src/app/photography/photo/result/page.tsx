@@ -5,10 +5,11 @@ import style from "../../camera.module.css";
 import Arrow from "@/components/button/arrow/arrow";
 import gameStyle from "@/app/game/game.module.css";
 import { getCharacterRow } from "@/utils/getCharacterRow";
+import { toHiragana } from "@/utils/kanaConverter";
 
 interface AnalysisResult {
-    name: string; // 名前のみを保存
-    description: string; // 説明文を保存
+    name: string;
+    description: string;
     imageUrl: string;
 }
 
@@ -17,21 +18,18 @@ export default function Result() {
     const [result, setResult] = useState<AnalysisResult | null>(null);
     const [analyzing, setAnalyzing] = useState(true);
 
-    // 画面タップ処理の追加
-    // app/photo/result/page.tsx の修正
     const handleScreenTap = () => {
         if (result?.name) {
-            // nameを使用するように変更
-            const characters = result.name.split(""); // 名前のみを分割
+            const characters = result.name.split("");
             const shuffled = characters.sort(() => Math.random() - 0.5);
             localStorage.setItem(
                 "gameTarget",
                 JSON.stringify({
-                    original: result.name, // 名前のみを保存
+                    original: result.name,
                     shuffled: shuffled,
                 })
             );
-            router.push("/game");
+            router.push("/findDescription/Description");
         }
     };
 
@@ -52,7 +50,6 @@ export default function Result() {
                 });
 
                 const data = await response.json();
-                console.log("API Response:", data);
 
                 if (data.error) {
                     throw new Error(data.error);
@@ -61,12 +58,10 @@ export default function Result() {
                 const content = data.result.choices[0].message.content;
                 const [rawName, ...descriptionParts] = content.split("\n").filter(Boolean);
 
-                // 名前の正規表現パターンを拡張
                 const namePattern =
                     /^(ものの名前|物体の名前|物体のなまえ|ぶったいのなまえ|ぶったいの名前|もしばんごう|もじ番号|文字ばんごう)[:：]/;
-                const name = rawName.replace(namePattern, "").trim().replace(/。$/, "");
+                const name = toHiragana(rawName.replace(namePattern, "").trim().replace(/。$/, ""));
 
-                // 説明文の正規表現パターンを拡張
                 const descriptionPattern =
                     /^(せつめい|説明文|せつめい文|説明ぶん|せつめいぶん)[:：]/;
                 const description = descriptionParts
@@ -75,7 +70,6 @@ export default function Result() {
                     .trim()
                     .replace(/。$/, "");
 
-                // 説明文をlocalStorageに保存
                 localStorage.setItem("description", description);
 
                 setResult({
@@ -83,8 +77,6 @@ export default function Result() {
                     description: description || "説明はありません",
                     imageUrl,
                 });
-
-                console.log("Result:", { name, description });
             } catch (error) {
                 console.error("分析エラー:", error);
                 alert("画像の分析に失敗しました。");
@@ -116,7 +108,6 @@ export default function Result() {
             });
 
             const data = await response.json();
-            console.log("API Response:", data);
 
             if (data.error) {
                 throw new Error(data.error);
@@ -127,7 +118,7 @@ export default function Result() {
 
             const namePattern =
                 /^(ものの名前|物体の名前|物体のなまえ|ぶったいのなまえ|ぶったいの名前|もしばんごう|もじ番号|文字ばんごう)[:：]/;
-            const name = rawName.replace(namePattern, "").trim().replace(/。$/, "");
+            const name = toHiragana(rawName.replace(namePattern, "").trim().replace(/。$/, ""));
 
             const descriptionPattern = /^(せつめい|説明文|せつめい文|説明ぶん|せつめいぶん)[:：]/;
             const description = descriptionParts

@@ -20,18 +20,6 @@ export default function PictureBook() {
     const [words, setWords] = useState<WordData[]>([]);
     const [loading, setLoading] = useState(true);
 
-    const handleNext = () => {
-        if ((currentPage + 1) * itemsPerPage < words.length) {
-            setCurrentPage(currentPage + 1);
-        }
-    };
-
-    const handlePrevious = () => {
-        if (currentPage > 0) {
-            setCurrentPage(currentPage - 1);
-        }
-    };
-
     useEffect(() => {
         const fetchWords = async () => {
             try {
@@ -45,7 +33,7 @@ export default function PictureBook() {
                         id: doc.id,
                         word: data.word,
                         description: data.description,
-                        imageUrl: data.imageUrl || null, // Firestoreに保存された画像URL
+                        imageUrl: data.imageUrl || null,
                     };
                 });
 
@@ -59,6 +47,22 @@ export default function PictureBook() {
 
         fetchWords();
     }, []);
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
+    const handleNext = () => {
+        if ((currentPage + 1) * itemsPerPage < words.length) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
+
+    const handlePrevious = () => {
+        if (currentPage > 0) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
 
     return (
         <>
@@ -90,20 +94,25 @@ export default function PictureBook() {
                         ))}
                 </div>
                 <div className={style.navButtons}>
-                    <button
-                        onClick={handlePrevious}
-                        disabled={currentPage === 0}
-                        className={style.navButton}
-                    >
-                        もどる
-                    </button>
-                    <button
-                        onClick={handleNext}
-                        disabled={(currentPage + 1) * itemsPerPage >= words.length}
-                        className={style.navButton}
-                    >
-                        すすむ
-                    </button>
+                    <div className={style.navigationButtons}>
+                        <button
+                            onClick={handlePrevious}
+                            disabled={currentPage === 0}
+                            className={style.navButton}
+                        >
+                            まえ
+                        </button>
+                        <p className={style.pageIndicator}>
+                            {currentPage + 1} / {Math.ceil(words.length / itemsPerPage)}
+                        </p>
+                        <button
+                            onClick={handleNext}
+                            disabled={(currentPage + 1) * itemsPerPage >= words.length}
+                            className={style.navButton}
+                        >
+                            つぎ
+                        </button>
+                    </div>
                 </div>
             </div>
         </>

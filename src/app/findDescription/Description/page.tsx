@@ -16,7 +16,7 @@ export default function Page() {
 
     return (
         <div>
-            <Arrow backPath="/" />
+            <Arrow backPath="/photography/photo/result" />
             <div onClick={startPhotoGraphy} className={style.findWrapper}>
                 <div className={style.descriptionWrap}>
                     <h1 className={style.descriptionTit}>

@@ -26,22 +26,22 @@
 
 .border {
     width: 100%;
-    height: 100%;
+    height: 100svh;
     margin: auto;
-    padding: 10px 30px;
+    padding: 20px 30px;
     border: 2px dashed #ffe681;
     border-radius: 6px;
 }
 
 .resultContainer {
     width: 100%;
-    height: 100vh;
+    height: 100svh;
     display: flex;
     flex-direction: column;
 }
 
 .header {
-    height: 20vh;
+    height: 20svh;
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -57,7 +57,7 @@
 
 .resultContents {
     width: 100%;
-    height: 55vh;
+    height: 55svh;
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -89,7 +89,7 @@
 
 .reAnalyzeWrap {
     width: 100%;
-    height: 25vh;
+    height: 25svh;
     display: flex;
     justify-content: center;
     align-items: flex-start;
@@ -136,7 +136,7 @@
 .photoContainer {
     position: relative;
     width: 100%;
-    height: 100vh;
+    height: 100svh;
     display: flex;
     align-items: center;
     justify-content: center;

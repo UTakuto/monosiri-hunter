@@ -119,3 +119,39 @@
     background-color: #f5f5f5;
     border-radius: 8px;
 }
+
+@media screen and (max-width: 780px) {
+    .wordText {
+        font-size: 1rem;
+    }
+
+    .descriptionText {
+        font-size: 0.875rem;
+    }
+
+    .container {
+        width: 80%;
+    }
+
+    .contentWrapper {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)) !important;
+        gap: 20px;
+    }
+
+    .imageContent {
+        width: 150px;
+        height: 150px;
+    }
+
+    .wordCard {
+        padding: 3px 10px 10px;
+    }
+
+    .wordName {
+        font-size: 18px;
+    }
+
+    .wordDescription {
+        font-size: 14px;
+    }
+}

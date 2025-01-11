@@ -120,7 +120,7 @@
     border-radius: 8px;
 }
 
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 960px) {
     .wordText {
         font-size: 1rem;
     }

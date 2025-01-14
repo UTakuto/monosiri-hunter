@@ -22,3 +22,93 @@
     text-align: center;
     /* padding-top: 50px; */
 }
+
+.cardAnimationContainer {
+    display: block;
+    position: relative;
+    width: 50%;
+    height: 50%;
+    margin: 0 auto;
+}
+
+.card1,
+.card2,
+.card3 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    /* transform: translateX(-50%); */
+    width: 100px;
+    height: 150px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.25) inset;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+.card1 {
+    left: calc(50% - 220px);
+    animation-delay: 0s;
+    background-color: #c45959;
+}
+
+.card2 {
+    left: calc(50% - 50px);
+    animation-delay: 0.2s;
+    background-color: #ea8e51;
+}
+
+.card3 {
+    left: calc(50% + 120px);
+    animation-delay: 0.4s;
+    background-color: #5172ea;
+}
+/* 
+.animate {
+    animation: gatherCards 2s forwards;
+}
+
+@keyframes gatherCards {
+    0% {
+        transform: translateY(-50%) translateX(0) rotate(0deg);
+    }
+    100% {
+        transform: translateY(-50%) translateX(calc(50% - 50px)) rotate(360deg);
+    }
+} */
+
+.card1.animate {
+    animation: gatherFromLeft 2s forwards;
+}
+
+.card2.animate {
+    animation: stayInPlace 2s forwards;
+}
+
+.card3.animate {
+    animation: gatherFromRight 2s forwards;
+}
+
+@keyframes gatherFromLeft {
+    0% {
+        transform: translateX(0) rotate(0deg);
+    }
+    100% {
+        transform: translateX(170px) rotate(360deg);
+    }
+}
+
+@keyframes stayInPlace {
+    0%,
+    100% {
+        transform: translateX(0) rotate(0deg);
+    }
+}
+
+@keyframes gatherFromRight {
+    0% {
+        transform: translateX(0) rotate(0deg);
+    }
+    100% {
+        transform: translateX(-170px) rotate(360deg);
+    }
+}

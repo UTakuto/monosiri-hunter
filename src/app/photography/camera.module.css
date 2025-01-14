@@ -50,7 +50,7 @@
 .headerText {
     display: inline;
     height: 100%;
-    font-size: 40px;
+    font-size: 20px;
     font-weight: bold;
     padding-top: 50px;
 }
@@ -77,7 +77,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 80px;
+    font-size: 40px;
     font-weight: bold;
 }
 

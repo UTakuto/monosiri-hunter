@@ -26,16 +26,16 @@ export default function Page() {
                         className={style.character}
                         src="/character.png"
                         alt="キャラクター"
-                        width={150}
-                        height={150}
+                        width={80}
+                        height={80}
                     />
                 </div>
                 <Image
                     src="/handGesture.png"
                     alt="タップしてね"
                     className={cameraStyle.handGestureImg}
-                    width={280}
-                    height={210}
+                    width={200}
+                    height={150}
                 />
             </div>
         </div>

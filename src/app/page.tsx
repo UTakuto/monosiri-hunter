@@ -13,8 +13,8 @@ export default function Page() {
                         className={style.logo}
                         src={"/logo.webp"}
                         alt="ものしりハンター"
-                        width={150}
-                        height={60}
+                        width={100}
+                        height={20}
                     />
                     <div className={style.characterWrap}>
                         <p className={style.speechBubble}>たんけんにでよう！</p>

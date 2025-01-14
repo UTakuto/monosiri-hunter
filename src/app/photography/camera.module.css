@@ -168,7 +168,7 @@
 
 .characterWrap {
     position: absolute;
-    bottom: 10px;
+    bottom: -20px;
     left: 40px;
     width: 130px;
     height: 200px;

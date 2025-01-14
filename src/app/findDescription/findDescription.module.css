@@ -1,7 +1,7 @@
 .character {
     display: block;
-    width: 100%;
-    height: 80%;
+    width: 80%;
+    height: 60%;
 }
 
 .findWrapper {
@@ -17,7 +17,7 @@
 }
 
 .descriptionTit {
-    font-size: 40px;
+    font-size: 30px;
     font-weight: bold;
     text-align: center;
     /* padding-top: 50px; */

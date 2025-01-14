@@ -5,14 +5,14 @@
 .searchPicture {
     position: absolute;
     z-index: 10;
-    top: 18px;
-    left: 165px;
+    top: 10px;
+    left: 140px;
 }
 
 .cameraButton {
     position: relative;
-    width: 250px;
-    height: 100px;
+    width: 200px;
+    height: 80px;
     background-color: #ff7530;
     border: none;
     border-radius: 10px;
@@ -28,7 +28,7 @@
     width: 100%;
     height: 100svh;
     margin: auto;
-    padding: 20px 30px;
+    padding: 10px 10px;
     border: 2px dashed #ffe681;
     border-radius: 6px;
 }

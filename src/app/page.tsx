@@ -11,7 +11,7 @@ export default function Page() {
                 <div className={style.header}>
                     <Image
                         className={style.logo}
-                        src={"/logo.webp"}
+                        src={"/logo.png"}
                         alt="ものしりハンター"
                         width={100}
                         height={20}

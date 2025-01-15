@@ -48,7 +48,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border: #ff7530 1px solid;
+    /* border: #ff7530 1px solid; */
     background-color: #fffae6;
     margin-top: 50px;
     margin: auto 0;

@@ -168,22 +168,22 @@ export default function Result() {
                             ))}
                         </h1>
                         <p className={style.descriptionText}>{result.description}</p>
+                        <div className={style.reAnalyzeWrap}>
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleReAnalyze();
+                                }}
+                                className={style.reAnalyzeButton}
+                            >
+                                もういちどしらべる
+                            </button>
+                        </div>
                     </div>
                 </>
             ) : (
                 <p className={style.loading}>しゃしんがなかったよ</p>
             )}
-            <div className={style.reAnalyzeWrap}>
-                <button
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        handleReAnalyze();
-                    }}
-                    className={style.reAnalyzeButton}
-                >
-                    もういちどしらべる
-                </button>
-            </div>
         </div>
     );
 }

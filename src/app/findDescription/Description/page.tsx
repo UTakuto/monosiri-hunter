@@ -9,17 +9,17 @@ export default function Page() {
     const router = useRouter();
     const [isAnimating, setIsAnimating] = useState(false);
 
-    useEffect(() => {
-        // コンポーネントマウント時にアニメーションを開始
-        setIsAnimating(true);
+    // useEffect(() => {
+    //     // コンポーネントマウント時にアニメーションを開始
+    //     setIsAnimating(true);
 
-        // アニメーション完了後にページ遷移
-        const timer = setTimeout(() => {
-            router.push("/game");
-        }, 2000); // アニメーション時間と同じ2秒
+    //     // アニメーション完了後にページ遷移
+    //     const timer = setTimeout(() => {
+    //         router.push("/game");
+    //     }, 2000); // アニメーション時間と同じ2秒
 
-        return () => clearTimeout(timer);
-    }, []); // 空の依存配列で一度だけ実行
+    //     return () => clearTimeout(timer);
+    // }, []); // 空の依存配列で一度だけ実行
 
     return (
         <div>

@@ -1,0 +1,66 @@
+.notice {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100svh;
+    background: #fff;
+    z-index: 1000;
+    display: flex;
+    /* flex-direction: column; */
+    justify-content: space-evenly;
+    align-items: center;
+    background: no-repeat url("/background.png") center center / cover;
+}
+
+.smartPhoneWrap {
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.noticeTextWrap {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.noticeTextWrap img {
+    width: 260px;
+    height: 80px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -70%);
+}
+
+.noticeText {
+    position: relative;
+    z-index: 10;
+    color: #fefefe;
+    font-size: 16px;
+    font-family: var(--font-kosugi), serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.smartImage {
+    width: 230px;
+    height: 230px;
+}
+
+.handImage {
+    width: 310px;
+    height: 140px;
+}
+
+.handImage img,
+.smartImage img {
+    width: 100%;
+    height: 100%;
+}

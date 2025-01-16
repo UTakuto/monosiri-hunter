@@ -1,4 +1,5 @@
 "use client";
+import Notice from "@/components/Notice/Notice";
 import Camera from "../components/button/camera/camera";
 import Picture from "../components/button/picture/Picture";
 import style from "./index.module.css";
@@ -7,6 +8,7 @@ import Image from "next/image";
 export default function Page() {
     return (
         <div className={style.container}>
+            <Notice />
             <div className={style.wrapper}>
                 <div className={style.header}>
                     <Image

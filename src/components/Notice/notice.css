@@ -64,3 +64,17 @@
     width: 100%;
     height: 100%;
 }
+
+@media screen and (max-width: 500px) {
+    .notice {
+        flex-direction: column;
+    }
+
+    .smartPhoneWrap {
+        height: 30%;
+    }
+
+    .noticeTextWrap {
+        height: 10%;
+    }
+}

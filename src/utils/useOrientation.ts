@@ -12,19 +12,25 @@ export const useOrientation = () => {
             );
 
         if (!isMobileDevice) {
-            setIsLandscape(false);
+            setIsLandscape(true);
             return;
         }
 
         const handleOrientationChange = () => {
-            setIsLandscape(window.orientation === 90 || window.orientation === -90);
+            if (window.screen.orientation) {
+                setIsLandscape(window.screen.orientation.type.includes("landscape"));
+            } else if (window.orientation) {
+                setIsLandscape(window.orientation === 90 || window.orientation === -90);
+            }
         };
 
         handleOrientationChange();
         window.addEventListener("orientationchange", handleOrientationChange);
+        window.addEventListener("resize", handleOrientationChange);
 
         return () => {
             window.removeEventListener("orientationchange", handleOrientationChange);
+            window.removeEventListener("resize", handleOrientationChange);
         };
     }, []);
 

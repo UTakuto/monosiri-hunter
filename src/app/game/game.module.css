@@ -12,10 +12,12 @@
 
 .selectedContainer {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 15px;
+    overflow-x: auto;
+    white-space: nowrap;
     padding: 10px;
+    gap: 10px;
+    scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch;
 }
 
 .selectedChar {
@@ -75,17 +77,6 @@
     background-color: #ffffff;
 }
 
-/* .hiraganaResultChar {
-    width: 90px;
-    height: 120px;
-    font-size: 40px;
-    padding: 10px;
-    margin: 5px;
-    border: none;
-    border-radius: 7px;
-    background-color: #ffffff;
-} */
-
 .gameSelectContainer {
     height: 60svh;
     display: flex;
@@ -95,8 +86,12 @@
 
 .gameText {
     display: flex;
-    align-items: center;
-    gap: 30px;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding: 10px;
+    gap: 20px;
+    scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch;
 }
 
 .successChars {
@@ -106,6 +101,24 @@
     text-align: center;
     line-height: 80px;
     gap: 10px;
+}
+
+/* スクロールバーのスタイリング */
+.selectedContainer::-webkit-scrollbar,
+.gameText::-webkit-scrollbar {
+    height: 4px;
+}
+
+.selectedContainer::-webkit-scrollbar-track,
+.gameText::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 2px;
+}
+
+.selectedContainer::-webkit-scrollbar-thumb,
+.gameText::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 2px;
 }
 
 .buttonContainer {

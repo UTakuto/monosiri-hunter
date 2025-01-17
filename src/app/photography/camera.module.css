@@ -67,9 +67,27 @@
 
 .resultText {
     display: flex;
-    gap: 20px;
-    font-size: 60px;
-    text-align: center;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding: 10px;
+    gap: 10px;
+    scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 20px;
+}
+
+.resultText::-webkit-scrollbar {
+    height: 4px;
+}
+
+.resultText::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 2px;
+}
+
+.resultText::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 2px;
 }
 
 .loading {

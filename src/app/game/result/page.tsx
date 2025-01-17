@@ -5,7 +5,6 @@ import { getCharacterRow } from "@/utils/getCharacterRow";
 import { SuccessModal } from "@/components/modal/SuccessModal";
 import { addWord } from "@/components/Word/AddWord";
 import style from "../game.module.css";
-import { log } from "console";
 
 export default function GameResult() {
     const router = useRouter();

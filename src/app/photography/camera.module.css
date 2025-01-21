@@ -69,6 +69,7 @@
 
 .resultText {
     display: flex;
+    max-width: 100%;
     overflow-x: auto;
     white-space: nowrap;
     padding: 10px;
@@ -76,19 +77,19 @@
     scrollbar-width: thin;
     -webkit-overflow-scrolling: touch;
     margin-bottom: 20px;
+    -ms-overflow-style: none; /* IEとEdge用 */
 }
 
 .resultText::-webkit-scrollbar {
-    height: 4px;
+    height: 4px; /* スクロールバーの高さ */
 }
 
 .resultText::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 2px;
+    background: #f1f1f1; /* スクロールバーの背景色 */
 }
 
 .resultText::-webkit-scrollbar-thumb {
-    background: #888;
+    background: #888; /* スクロールバーの色 */
     border-radius: 2px;
 }
 

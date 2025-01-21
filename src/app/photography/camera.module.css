@@ -41,6 +41,8 @@
 }
 
 .header {
+    width: 20%;
+    margin-left: 180px;
     height: 20svh;
     display: flex;
     justify-content: flex-start;

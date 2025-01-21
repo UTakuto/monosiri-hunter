@@ -70,7 +70,7 @@ export default function GameResult() {
     }, []);
 
     const handleBack = () => {
-        router.push("/game"); // ホームへ戻る
+        router.push("/photography"); // カメラ画面戻る
         console.log(loading);
     };
 

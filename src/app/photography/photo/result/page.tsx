@@ -143,47 +143,49 @@ export default function Result() {
     };
 
     return (
-        <div className={style.resultContainer} onClick={handleScreenTap}>
-            <div className={style.header}>
-                <Arrow backPath="/photography/photo" />
-                <p className={style.headerText}>これは、</p>
-            </div>
-            {analyzing ? (
-                <p className={style.loading}>しらべているよ...</p>
-            ) : result ? (
-                <>
-                    <div className={style.resultContents}>
-                        <h1 className={style.resultText}>
-                            {result.name.split("").map((char, index) => (
+        <>
+            <Arrow backPath="/photography/photo" />
+            <div className={style.resultContainer} onClick={handleScreenTap}>
+                <div className={style.header}>
+                    <p className={style.headerText}>これは、</p>
+                </div>
+                {analyzing ? (
+                    <p className={style.loading}>しらべているよ...</p>
+                ) : result ? (
+                    <>
+                        <div className={style.resultContents}>
+                            <h1 className={style.resultText}>
+                                {result.name.split("").map((char, index) => (
+                                    <button
+                                        key={index}
+                                        className={`
+                                            ${gameStyle.hiraganaChar}
+                                            ${gameStyle.resultChar}
+                                            ${gameStyle[getCharacterRow(char)]}
+                                        `}
+                                    >
+                                        {char}
+                                    </button>
+                                ))}
+                            </h1>
+                            <p className={style.descriptionText}>{result.description}</p>
+                            <div className={style.reAnalyzeWrap}>
                                 <button
-                                    key={index}
-                                    className={`
-                                        ${gameStyle.hiraganaChar}
-                                        ${gameStyle.resultChar}
-                                        ${gameStyle[getCharacterRow(char)]}
-                                    `}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleReAnalyze();
+                                    }}
+                                    className={style.reAnalyzeButton}
                                 >
-                                    {char}
+                                    もういちどしらべる
                                 </button>
-                            ))}
-                        </h1>
-                        <p className={style.descriptionText}>{result.description}</p>
-                        <div className={style.reAnalyzeWrap}>
-                            <button
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleReAnalyze();
-                                }}
-                                className={style.reAnalyzeButton}
-                            >
-                                もういちどしらべる
-                            </button>
+                            </div>
                         </div>
-                    </div>
-                </>
-            ) : (
-                <p className={style.loading}>しゃしんがなかったよ</p>
-            )}
-        </div>
+                    </>
+                ) : (
+                    <p className={style.loading}>しゃしんがなかったよ</p>
+                )}
+            </div>
+        </>
     );
 }

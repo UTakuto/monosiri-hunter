@@ -3,6 +3,10 @@
     height: 50%;
     margin-bottom: auto;
     padding: 30px 0 0 40px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
 }
 
 .backBtn {

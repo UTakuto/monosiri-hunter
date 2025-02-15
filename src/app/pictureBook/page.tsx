@@ -1,11 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import "../index.module.css";
-import style from "./pictureBook.module.css";
-import Arrow from "@/components/button/arrow/arrow";
+import { getAuth } from "firebase/auth";
 import { db } from "@/lib/firebase";
 import { getDocs, collection, query, orderBy } from "firebase/firestore";
+import style from "./pictureBook.module.css";
+import Arrow from "@/components/button/arrow/arrow";
+
 interface WordData {
     id: string;
     word: string;
@@ -18,11 +19,19 @@ export default function PictureBook() {
     const itemsPerPage = 2;
     const [words, setWords] = useState<WordData[]>([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchWords = async () => {
+            const auth = getAuth();
+            if (!auth.currentUser) {
+                setError("認証が必要です");
+                setLoading(false);
+                return;
+            }
+
             try {
-                const wordsRef = collection(db, "words");
+                const wordsRef = collection(db, "users", auth.currentUser.uid, "words");
                 const q = query(wordsRef, orderBy("createdAt", "desc"));
                 const querySnapshot = await getDocs(q);
 
@@ -37,8 +46,10 @@ export default function PictureBook() {
                 });
 
                 setWords(wordsData);
+                setError(null);
             } catch (error) {
                 console.error("Error fetching words:", error);
+                setError("データの取得に失敗しました");
             } finally {
                 setLoading(false);
             }
@@ -46,10 +57,6 @@ export default function PictureBook() {
 
         fetchWords();
     }, []);
-
-    if (loading) {
-        return <div>Loading...</div>;
-    }
 
     const handleNext = () => {
         if ((currentPage + 1) * itemsPerPage < words.length) {
@@ -62,6 +69,14 @@ export default function PictureBook() {
             setCurrentPage(currentPage - 1);
         }
     };
+
+    if (loading) {
+        return <div className={style.loading}>読み込み中...</div>;
+    }
+
+    if (error) {
+        return <div className={style.error}>{error}</div>;
+    }
 
     return (
         <>
@@ -80,7 +95,7 @@ export default function PictureBook() {
                                         <div className={style.imageContainer}>
                                             <Image
                                                 src={word.imageUrl}
-                                                alt={`${word.word}の写真`} // alt属性を追加
+                                                alt={`${word.word}の写真`}
                                                 width={300}
                                                 height={300}
                                                 className={style.wordImage}

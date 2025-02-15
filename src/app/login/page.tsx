@@ -1,4 +1,5 @@
 "use client";
+import Notice from "@/components/Notice/Notice";
 import Image from "next/image";
 import { useAuth } from "@/hooks/useAuth";
 import styles from "./login.module.css";
@@ -19,6 +20,7 @@ export default function Login() {
 
     return (
         <div className={styles.container}>
+            <Notice />
             <div className={styles.content}>
                 <div className={styles.imageWrapper}>
                     <Image

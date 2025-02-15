@@ -1,9 +1,17 @@
 import { useState, useCallback } from "react";
-import { collection, addDoc, getDocs } from "firebase/firestore";
+import { collection, addDoc, getDocs, FirestoreError } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { ref, uploadBytes, getDownloadURL, StorageError } from "firebase/storage";
 import { db, storage } from "@/lib/firebase";
 import type { Child } from "@/types";
+
+// Firebaseのエラーを共通で処理するためのヘルパー関数
+const handleFirebaseError = (err: unknown): string => {
+    if (err instanceof FirestoreError || err instanceof StorageError) {
+        return err.message;
+    }
+    return "予期せぬエラーが発生しました";
+};
 
 export const useChild = () => {
     const [isLoading, setIsLoading] = useState(false);
@@ -27,8 +35,8 @@ export const useChild = () => {
                         ...doc.data(),
                     } as Child)
             );
-        } catch (err: any) {
-            const errorMessage = err.message || "子どもアカウントの取得に失敗しました";
+        } catch (err: unknown) {
+            const errorMessage = handleFirebaseError(err);
             setError(errorMessage);
             throw new Error(errorMessage);
         } finally {
@@ -50,8 +58,11 @@ export const useChild = () => {
                     createdAt: new Date().toISOString(),
                     collection: [],
                 });
-            } catch (err: any) {
-                const errorMessage = err.message || "子どもアカウントの作成に失敗しました";
+            } catch (err: unknown) {
+                const errorMessage =
+                    err instanceof FirestoreError
+                        ? err.message
+                        : "子どもアカウントの作成に失敗しました";
                 setError(errorMessage);
                 throw new Error(errorMessage);
             } finally {
@@ -71,21 +82,18 @@ export const useChild = () => {
                 setIsLoading(true);
                 setError(null);
 
-                // ストレージの参照を作成
                 const storageRef = ref(
                     storage,
                     `users/${auth.currentUser.uid}/photos/${Date.now()}_${file.name}`
                 );
 
-                // ファイルをアップロード
                 await uploadBytes(storageRef, file);
-
-                // アップロードしたファイルのURLを取得
                 const downloadURL = await getDownloadURL(storageRef);
 
                 return downloadURL;
-            } catch (err: any) {
-                const errorMessage = err.message || "写真のアップロードに失敗しました";
+            } catch (err: unknown) {
+                const errorMessage =
+                    err instanceof StorageError ? err.message : "写真のアップロードに失敗しました";
                 setError(errorMessage);
                 throw new Error(errorMessage);
             } finally {
@@ -98,7 +106,7 @@ export const useChild = () => {
     return {
         getChildren,
         createChild,
-        uploadPhoto, // 新しいメソッドを追加
+        uploadPhoto,
         isLoading,
         error,
     };

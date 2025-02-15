@@ -1,11 +1,15 @@
-"use client";
+"use client"; // クライアントコンポーネントとして宣言
+
 import Notice from "@/components/Notice/Notice";
 import Camera from "../components/button/camera/camera";
 import Picture from "../components/button/picture/Picture";
 import style from "./index.module.css";
 import Image from "next/image";
+import { useAuthRedirect } from "@/utils/authUtils";
 
 export default function Page() {
+    useAuthRedirect();
+
     return (
         <div className={style.container}>
             <Notice />

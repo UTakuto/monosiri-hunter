@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useChild } from "@/hooks/useChild";
 import type { Child } from "@/types";
 import { useRouter } from "next/navigation";
+import style from "./child.module.css";
 
 export const ChildList = () => {
     const [children, setChildren] = useState<Child[]>([]);
@@ -32,34 +33,30 @@ export const ChildList = () => {
 
     if (isLoading) {
         return (
-            <div className="flex justify-center items-center h-32">
-                <div className="text-gray-600">読み込み中...</div>
+            <div className={style.loading}>
+                <div className={style.loadingTxt}>読み込み中...</div>
             </div>
         );
     }
 
     if (fetchError || error) {
-        return (
-            <div className="text-red-500 text-center p-4">
-                エラーが発生しました: {fetchError || error}
-            </div>
-        );
+        return <div className={style.error}>エラーが発生しました: {fetchError || error}</div>;
     }
 
     return (
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <div className={style.childList}>
             {children.map((child) => (
                 <button
                     key={child.id}
                     onClick={() => handleSelectChild(child.id)}
-                    className="p-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                    className={style.childButton}
                 >
                     {child.name}
                 </button>
             ))}
             <button
                 onClick={() => router.push("/create-child")}
-                className="p-4 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
+                className={style.createChildButton}
             >
                 新しい子どもアカウントを作成
             </button>

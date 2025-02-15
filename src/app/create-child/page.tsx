@@ -45,7 +45,9 @@ export default function CreateChildPage() {
                     </div>
 
                     <button type="submit" disabled={isLoading} className={style.submitButton}>
-                        {isLoading ? "作成中" : "アカウントを作成"}
+                        <span className={style.submitBorder}>
+                            {isLoading ? "作成中" : "アカウントを作成"}
+                        </span>
                     </button>
 
                     {error && <p className={style.error}>{error}</p>}

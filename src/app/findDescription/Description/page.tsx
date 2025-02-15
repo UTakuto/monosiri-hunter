@@ -19,7 +19,7 @@ export default function Page() {
         }, 2000); // アニメーション時間と同じ2秒
 
         return () => clearTimeout(timer);
-    }, []); // 空の依存配列で一度だけ実行
+    }, [router]); // 空の依存配列で一度だけ実行
 
     return (
         <div>

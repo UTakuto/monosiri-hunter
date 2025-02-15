@@ -4,7 +4,9 @@ import { useRouter } from "next/navigation";
 import { getCharacterRow } from "@/utils/getCharacterRow";
 import { SuccessModal } from "@/components/modal/SuccessModal";
 import { addWord } from "@/components/Word/AddWord";
+import { WordData } from "@/types/word";
 import style from "../game.module.css";
+import { RequireAuth } from "@/components/auth/RequireAuth";
 
 export default function GameResult() {
     const router = useRouter();
@@ -16,7 +18,6 @@ export default function GameResult() {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
-        // クライアントサイドでのみデータを取得
         setWord(localStorage.getItem("wordToRegister"));
         setDescription(localStorage.getItem("description"));
         const savedData = localStorage.getItem("analysisTarget");
@@ -27,8 +28,8 @@ export default function GameResult() {
     }, []);
 
     const handleRegister = async () => {
-        if (!word || !description || !imageUrl) {
-            setError("しっぱいしました。もういちどやりなおしてください。");
+        if (!word?.trim() || !description?.trim() || !imageUrl?.trim()) {
+            setError("必要な情報がそろっていません");
             return;
         }
 
@@ -36,24 +37,33 @@ export default function GameResult() {
         setError(null);
 
         try {
-            const result = await addWord({
-                word,
-                description,
-                imageUrl,
+            const wordToAdd: WordData = {
+                word: word.trim(),
+                description: description.trim(),
+                imageUrl: imageUrl.trim(),
                 createdAt: new Date(),
-            });
+                updatedAt: new Date(),
+            };
 
-            if (result) {
-                setIsModalOpen(true);
+            const docId = await addWord(wordToAdd);
+
+            if (docId) {
                 // ローカルストレージのクリーンアップ
                 localStorage.removeItem("wordToRegister");
                 localStorage.removeItem("description");
                 localStorage.removeItem("analysisTarget");
+
+                // 状態のリセット
+                setWord(null);
+                setDescription(null);
+                setImageUrl(null);
+
+                // 成功モーダルの表示
+                setIsModalOpen(true);
             }
-        } catch (err) {
+        } catch (err: unknown) {
             console.error("登録エラー:", err);
-            setError("しっぱいしました。もういちどやりなおしてください。");
-            console.log("登録エラー:", error);
+            setError(err instanceof Error ? err.message : "予期せぬエラーが発生しました");
         } finally {
             setLoading(false);
         }
@@ -75,46 +85,50 @@ export default function GameResult() {
     };
 
     return (
-        <div className={style.container}>
-            <div className={style.resultContainer}>
-                {word && (
-                    <div className={style.contentWrapper}>
-                        <div className={style.wordDisplay}>
-                            {word.split("").map((char, index) => (
-                                <p
-                                    key={index}
-                                    className={`
+        <RequireAuth>
+            <div className={style.container}>
+                <div className={style.resultContainer}>
+                    {word && (
+                        <div className={style.contentWrapper}>
+                            <div className={style.wordDisplay}>
+                                {word.split("").map((char, index) => (
+                                    <p
+                                        key={index}
+                                        className={`
                                         ${style.wordChar}
                                         ${style.resultChar}
                                         ${style[getCharacterRow(char)]}
                                     `}
-                                >
-                                    {char}
-                                </p>
-                            ))}
+                                    >
+                                        {char}
+                                    </p>
+                                ))}
+                            </div>
                         </div>
+                    )}
+                    {/* </div> */}
+                    <div className={style.descriptionContainer}>
+                        <p className={style.descriptionText}>
+                            {description || "説明文がありません"}
+                        </p>
                     </div>
-                )}
-                {/* </div> */}
-                <div className={style.descriptionContainer}>
-                    <p className={style.descriptionText}>{description || "説明文がありません"}</p>
+                    <div className={style.resultButtonContainer}>
+                        <button className={style.gameBackButton} onClick={handleBack}>
+                            もういっかい
+                        </button>
+                        <button className={style.gameSubmitButton} onClick={handleRegister}>
+                            げっとする
+                        </button>
+                    </div>
                 </div>
-                <div className={style.resultButtonContainer}>
-                    <button className={style.gameBackButton} onClick={handleBack}>
-                        もういっかい
-                    </button>
-                    <button className={style.gameSubmitButton} onClick={handleRegister}>
-                        げっとする
-                    </button>
-                </div>
+                <SuccessModal
+                    isOpen={isModalOpen}
+                    onClose={() => {
+                        setIsModalOpen(false);
+                        router.push("/pictureBook");
+                    }}
+                />
             </div>
-            <SuccessModal
-                isOpen={isModalOpen}
-                onClose={() => {
-                    setIsModalOpen(false);
-                    router.push("/pictureBook");
-                }}
-            />
-        </div>
+        </RequireAuth>
     );
 }

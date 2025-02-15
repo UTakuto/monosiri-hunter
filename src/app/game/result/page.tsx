@@ -30,7 +30,7 @@ export default function GameResult() {
     const handleRegister = async () => {
         if (!word?.trim() || !description?.trim() || !imageUrl?.trim()) {
             setError("必要な情報がそろっていません");
-            return;
+            return console.log(error);
         }
 
         setLoading(true);

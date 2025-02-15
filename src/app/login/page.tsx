@@ -1,4 +1,5 @@
 "use client";
+import Notice from "@/components/Notice/Notice";
 import Image from "next/image";
 import { useAuth } from "@/hooks/useAuth";
 import styles from "./login.module.css";
@@ -10,15 +11,16 @@ export default function Login() {
     const router = useRouter();
     const { signInWithGoogle, isLoading, error } = useAuth();
 
-    // useEffect(() => {
-    //     const auth = getAuth();
-    //     if (auth.currentUser) {
-    //         router.push("/");
-    //     }
-    // }, [router]);
+    useEffect(() => {
+        const auth = getAuth();
+        if (auth.currentUser) {
+            router.push("/");
+        }
+    }, [router]);
 
     return (
         <div className={styles.container}>
+            <Notice />
             <div className={styles.content}>
                 <div className={styles.imageWrapper}>
                     <Image

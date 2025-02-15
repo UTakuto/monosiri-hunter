@@ -9,12 +9,16 @@ const kosugi = Kosugi({
     variable: "--font-kosugi",
 });
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+    children,
+}: Readonly<{
+    children: React.ReactNode;
+}>) {
     return (
         <html lang="ja">
-            <body>
-                <AuthProvider>{children}</AuthProvider>
-            </body>
+            <AuthProvider>
+                <body className={`${kosugi.variable}`}>{children}</body>
+            </AuthProvider>
         </html>
     );
 }

@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useChild } from "@/hooks/useChild";
+import style from "@/app/login/login.module.css";
 
 export default function CreateChildPage() {
     const [name, setName] = useState("");
@@ -21,16 +22,16 @@ export default function CreateChildPage() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50">
-            <div className="max-w-md w-full space-y-8 p-6 bg-white rounded-xl shadow-md">
-                <div className="text-center">
-                    <h1 className="text-2xl font-bold">子どもアカウントの作成</h1>
-                    <p className="mt-2 text-gray-600">お子様の名前を入力してください</p>
+        <div className={style.createContainer}>
+            <div className={style.createForm}>
+                <div className={style.createHeader}>
+                    <h1 className={style.title}>子どもアカウントの作成</h1>
+                    <p className={style.description}>お子様の名前を入力してください</p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+                <form onSubmit={handleSubmit} className={style.form}>
                     <div>
-                        <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                        <label htmlFor="name" className={style.label}>
                             お名前
                         </label>
                         <input
@@ -38,20 +39,16 @@ export default function CreateChildPage() {
                             type="text"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
-                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                            className={style.input}
                             required
                         />
                     </div>
 
-                    <button
-                        type="submit"
-                        disabled={isLoading}
-                        className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-400"
-                    >
-                        {isLoading ? "作成中..." : "アカウントを作成"}
+                    <button type="submit" disabled={isLoading} className={style.submitButton}>
+                        {isLoading ? "作成中" : "アカウントを作成"}
                     </button>
 
-                    {error && <p className="text-red-500 text-center text-sm">{error}</p>}
+                    {error && <p className={style.error}>{error}</p>}
                 </form>
             </div>
         </div>

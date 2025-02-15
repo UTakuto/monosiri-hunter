@@ -1,24 +1,46 @@
 "use client";
+import Image from "next/image";
 import { useAuth } from "@/hooks/useAuth";
+import styles from "./login.module.css";
 
 export default function Login() {
     const { signInWithGoogle, isLoading, error } = useAuth();
 
     return (
-        <div className="min-h-screen flex items-center justify-center">
-            <div className="max-w-md w-full space-y-8">
-                <div className="text-center">
-                    <h1 className="text-2xl font-bold">ものしりハンター</h1>
-                    <p className="mt-2">保護者の方でログインしてください</p>
+        <div className={styles.container}>
+            <div className={styles.content}>
+                <div className={styles.header}>
+                    <h1 className={styles.title}>ものしりハンター</h1>
+                    <div className={styles.imageWrapper}>
+                        <Image
+                            src="/images/login-hero.png"
+                            alt="ものしりハンターロゴ"
+                            width={200}
+                            height={200}
+                            priority
+                        />
+                    </div>
                 </div>
-                <button
-                    onClick={signInWithGoogle}
-                    disabled={isLoading}
-                    className="w-full flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
-                >
-                    {isLoading ? "ログイン中..." : "Googleでログイン"}
-                </button>
-                {error && <p className="text-red-500 text-center">{error}</p>}
+
+                <div className={styles.formContainer}>
+                    <p className={styles.description}>保護者の方でログインしてください</p>
+                    <button
+                        onClick={signInWithGoogle}
+                        disabled={isLoading}
+                        className={styles.loginButton}
+                    >
+                        <div className={styles.buttonContent}>
+                            <Image
+                                src="/images/google-logo.png"
+                                alt="Googleロゴ"
+                                width={24}
+                                height={24}
+                            />
+                            <span>{isLoading ? "ログイン中..." : "Googleでログイン"}</span>
+                        </div>
+                    </button>
+                    {error && <p className={styles.error}>{error}</p>}
+                </div>
             </div>
         </div>
     );

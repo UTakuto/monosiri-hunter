@@ -9,6 +9,7 @@ import Arrow from "@/components/button/arrow/arrow";
 import style from "../../index.module.css";
 import "./photo.css";
 import { getAuth } from "firebase/auth";
+import { RequireAuth } from "@/components/auth/RequireAuth";
 
 export default function Photo() {
     const router = useRouter();
@@ -85,47 +86,53 @@ export default function Photo() {
     };
 
     return (
-        <div className={style.container}>
-            <Arrow backPath="/photography" />
-            {photo ? (
-                <div className={style.wrapper}>
-                    <div className="imageWrapper">
-                        <Image
-                            className="takeImage"
-                            src={photo}
-                            alt="撮影した写真"
-                            width={330}
-                            height={330}
-                            priority
-                        />
+        <RequireAuth>
+            <div className={style.container}>
+                <Arrow backPath="/photography" />
+                {photo ? (
+                    <div className={style.wrapper}>
+                        <div className="imageWrapper">
+                            <Image
+                                className="takeImage"
+                                src={photo}
+                                alt="撮影した写真"
+                                width={330}
+                                height={330}
+                                priority
+                            />
+                        </div>
+                        <div className={style.btnWrap}>
+                            <h2>このしゃしんでいいかな？</h2>
+                            <button
+                                className="proceedBtn"
+                                onClick={handleUpload}
+                                disabled={uploading}
+                            >
+                                <span className="proceedBorder">
+                                    {uploading ? "まってね" : "いいよ！"}
+                                </span>
+                            </button>
+                            <button
+                                className="removeBtn"
+                                onClick={() => router.push("/photography")}
+                                disabled={uploading}
+                            >
+                                <span className="backBorder">もどる</span>
+                            </button>
+                        </div>
                     </div>
-                    <div className={style.btnWrap}>
-                        <h2>このしゃしんでいいかな？</h2>
-                        <button className="proceedBtn" onClick={handleUpload} disabled={uploading}>
-                            <span className="proceedBorder">
-                                {uploading ? "まってね" : "いいよ！"}
-                            </span>
-                        </button>
+                ) : (
+                    <div className="text-center p-4">
+                        <p>写真が見つかりませんでした。</p>
                         <button
-                            className="removeBtn"
+                            className="mt-4 text-blue-500"
                             onClick={() => router.push("/photography")}
-                            disabled={uploading}
                         >
-                            <span className="backBorder">もどる</span>
+                            撮影画面に戻る
                         </button>
                     </div>
-                </div>
-            ) : (
-                <div className="text-center p-4">
-                    <p>写真が見つかりませんでした。</p>
-                    <button
-                        className="mt-4 text-blue-500"
-                        onClick={() => router.push("/photography")}
-                    >
-                        撮影画面に戻る
-                    </button>
-                </div>
-            )}
-        </div>
+                )}
+            </div>
+        </RequireAuth>
     );
 }

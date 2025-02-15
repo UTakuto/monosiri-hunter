@@ -5,6 +5,7 @@ import { getCharacterRow } from "@/utils/getCharacterRow";
 import { shuffle } from "@/utils/shuffle";
 import style from "./game.module.css";
 import Arrow from "@/components/button/arrow/arrow";
+import { RequireAuth } from "@/components/auth/RequireAuth";
 
 interface GameData {
     original: string;
@@ -109,69 +110,70 @@ export default function Game() {
     };
 
     return (
-        <div className={style.container}>
-            <div className={style.header}>
-                <Arrow backPath="/photography/photo/result" />
-                <div className={style.selectedContainer}>
-                    {selectedChars.map((char, index) => (
-                        <p
-                            key={index}
-                            className={`
+        <RequireAuth>
+            <div className={style.container}>
+                <div className={style.header}>
+                    <Arrow backPath="/photography/photo/result" />
+                    <div className={style.selectedContainer}>
+                        {selectedChars.map((char, index) => (
+                            <p
+                                key={index}
+                                className={`
                                 ${style.hiraganaChar}
                                 ${style.gamePlayChar}
                                 ${style.gameChar} 
                                 ${style[getCharacterRow(char)]}
                             `}
-                        >
-                            {char}
-                        </p>
-                    ))}
-                    {Array.from({
-                        length: (gameData?.original?.length || 0) - selectedChars.length,
-                    }).map((_, index) => (
-                        <p
-                            key={`empty-${index}`}
-                            className={`
+                            >
+                                {char}
+                            </p>
+                        ))}
+                        {Array.from({
+                            length: (gameData?.original?.length || 0) - selectedChars.length,
+                        }).map((_, index) => (
+                            <p
+                                key={`empty-${index}`}
+                                className={`
                                 ${style.emptyChar}
                                 ${style.selectedChar}
                             `}
-                        ></p>
-                    ))}
+                            ></p>
+                        ))}
+                    </div>
                 </div>
-            </div>
-            <div className={style.gameResultContainer}>
-                <div className={style.gameSelectContainer}>
-                    <div className={style.gameText}>
-                        {shuffledCharsState.map((charData) => (
-                            <button
-                                key={charData.id}
-                                className={`
+                <div className={style.gameResultContainer}>
+                    <div className={style.gameSelectContainer}>
+                        <div className={style.gameText}>
+                            {shuffledCharsState.map((charData) => (
+                                <button
+                                    key={charData.id}
+                                    className={`
                                     ${style.hiraganaChar} 
                                     ${style.gamePlayChar}
                                     ${charData.isSelected ? style.usedChar : ""}
                                     ${style[getCharacterRow(charData.char)]}
                                 `}
-                                onClick={() => handleCharClick(charData.char, charData.id)}
-                                disabled={charData.isSelected}
-                            >
-                                {charData.char}
-                            </button>
-                        ))}
-                    </div>
-                    <div className={style.buttonContainer}>
-                        <button
-                            onClick={handleUndo}
-                            className={`
+                                    onClick={() => handleCharClick(charData.char, charData.id)}
+                                    disabled={charData.isSelected}
+                                >
+                                    {charData.char}
+                                </button>
+                            ))}
+                        </div>
+                        <div className={style.buttonContainer}>
+                            <button
+                                onClick={handleUndo}
+                                className={`
                                 ${style.gameBackButton}
                                 ${selectedChars.length === 0 ? style.gameBackButtonDisabled : ""}
                             `}
-                            disabled={selectedChars.length === 0}
-                        >
-                            ひとつけす
-                        </button>
-                        <button
-                            onClick={handleSubmit}
-                            className={`
+                                disabled={selectedChars.length === 0}
+                            >
+                                ひとつけす
+                            </button>
+                            <button
+                                onClick={handleSubmit}
+                                className={`
                                 ${style.gameSubmitButton}
                                 ${
                                     selectedChars.length !== gameData?.original.length
@@ -179,13 +181,14 @@ export default function Game() {
                                         : ""
                                 }
                             `}
-                            disabled={selectedChars.length !== gameData?.original.length}
-                        >
-                            かんせい
-                        </button>
+                                disabled={selectedChars.length !== gameData?.original.length}
+                            >
+                                かんせい
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </RequireAuth>
     );
 }

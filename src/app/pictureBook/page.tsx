@@ -6,6 +6,7 @@ import { db } from "@/lib/firebase";
 import { getDocs, collection, query, orderBy } from "firebase/firestore";
 import style from "./pictureBook.module.css";
 import Arrow from "@/components/button/arrow/arrow";
+import { RequireAuth } from "@/components/auth/RequireAuth";
 
 interface WordData {
     id: string;
@@ -80,55 +81,57 @@ export default function PictureBook() {
 
     return (
         <>
-            <div className={style.header}>
-                <Arrow backPath="/" />
-            </div>
-            <div className={style.container}>
-                <div className={style.contentWrapper}>
-                    {words
-                        .slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage)
-                        .map((word) => (
-                            <div key={word.id} className={style.wordCard}>
-                                <h2 className={style.wordName}>{word.word}</h2>
-                                <div className={style.imageContent}>
-                                    {word.imageUrl && (
-                                        <div className={style.imageContainer}>
-                                            <Image
-                                                src={word.imageUrl}
-                                                alt={`${word.word}の写真`}
-                                                width={300}
-                                                height={300}
-                                                className={style.wordImage}
-                                            />
-                                        </div>
-                                    )}
-                                </div>
-                                <p className={style.wordDescription}>{word.description}</p>
-                            </div>
-                        ))}
+            <RequireAuth>
+                <div className={style.header}>
+                    <Arrow backPath="/" />
                 </div>
-                <div className={style.navButtons}>
-                    <div className={style.navigationButtons}>
-                        <button
-                            onClick={handlePrevious}
-                            disabled={currentPage === 0}
-                            className={style.navButton}
-                        >
-                            まえ
-                        </button>
-                        <p className={style.pageIndicator}>
-                            {currentPage + 1} / {Math.ceil(words.length / itemsPerPage)}
-                        </p>
-                        <button
-                            onClick={handleNext}
-                            disabled={(currentPage + 1) * itemsPerPage >= words.length}
-                            className={style.navButton}
-                        >
-                            つぎ
-                        </button>
+                <div className={style.container}>
+                    <div className={style.contentWrapper}>
+                        {words
+                            .slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage)
+                            .map((word) => (
+                                <div key={word.id} className={style.wordCard}>
+                                    <h2 className={style.wordName}>{word.word}</h2>
+                                    <div className={style.imageContent}>
+                                        {word.imageUrl && (
+                                            <div className={style.imageContainer}>
+                                                <Image
+                                                    src={word.imageUrl}
+                                                    alt={`${word.word}の写真`}
+                                                    width={300}
+                                                    height={300}
+                                                    className={style.wordImage}
+                                                />
+                                            </div>
+                                        )}
+                                    </div>
+                                    <p className={style.wordDescription}>{word.description}</p>
+                                </div>
+                            ))}
+                    </div>
+                    <div className={style.navButtons}>
+                        <div className={style.navigationButtons}>
+                            <button
+                                onClick={handlePrevious}
+                                disabled={currentPage === 0}
+                                className={style.navButton}
+                            >
+                                まえ
+                            </button>
+                            <p className={style.pageIndicator}>
+                                {currentPage + 1} / {Math.ceil(words.length / itemsPerPage)}
+                            </p>
+                            <button
+                                onClick={handleNext}
+                                disabled={(currentPage + 1) * itemsPerPage >= words.length}
+                                className={style.navButton}
+                            >
+                                つぎ
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </RequireAuth>
         </>
     );
 }

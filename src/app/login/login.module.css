@@ -45,8 +45,8 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: 95%;
-        height: 70%;
+        width: 285px;
+        height: 35px;
         border: dashed 2px #ffe681;
         border-radius: 4px;
     }
@@ -127,8 +127,8 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: 90%;
-        height: 70%;
+        width: 185px;
+        height: 35px;
         border: dashed 2px #ffe681;
         border-radius: 4px;
     }

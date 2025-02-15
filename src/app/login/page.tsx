@@ -10,12 +10,12 @@ export default function Login() {
     const router = useRouter();
     const { signInWithGoogle, isLoading, error } = useAuth();
 
-    useEffect(() => {
-        const auth = getAuth();
-        if (auth.currentUser) {
-            router.push("/");
-        }
-    }, [router]);
+    // useEffect(() => {
+    //     const auth = getAuth();
+    //     if (auth.currentUser) {
+    //         router.push("/");
+    //     }
+    // }, [router]);
 
     return (
         <div className={styles.container}>

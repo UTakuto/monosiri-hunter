@@ -5,6 +5,12 @@ import { db } from "@/lib/firebase";
 import { storage } from "@/utils/storage";
 import { useRouter } from "next/navigation";
 
+// カスタムエラー型の定義
+interface AuthenticationError extends Error {
+    code?: string;
+    message: string;
+}
+
 export const useAuth = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -40,13 +46,19 @@ export const useAuth = () => {
 
             // 子どもアカウント選択画面へ遷移
             router.push("/select-child");
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error("認証エラー:", error);
-            setError(
-                error.code === "auth/popup-closed-by-user"
-                    ? "ログインがキャンセルされました"
-                    : error.message || "ログインに失敗しました"
-            );
+
+            if (error instanceof Error) {
+                const authError = error as AuthenticationError;
+                setError(
+                    authError.code === "auth/popup-closed-by-user"
+                        ? "ログインがキャンセルされました"
+                        : authError.message || "ログインに失敗しました"
+                );
+            } else {
+                setError("予期せぬエラーが発生しました");
+            }
         } finally {
             setIsLoading(false);
         }

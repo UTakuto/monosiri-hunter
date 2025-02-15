@@ -1,0 +1,104 @@
+.container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #f6f8fb 0%, #e5ebf4 100%);
+    padding: 1rem;
+}
+
+.content {
+    max-width: 480px;
+    width: 100%;
+    background: white;
+    border-radius: 1.5rem;
+    padding: 2rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #2d3748;
+    margin-bottom: 1rem;
+}
+
+.imageWrapper {
+    margin: 2rem auto;
+    width: 200px;
+    height: 200px;
+    position: relative;
+}
+
+.description {
+    text-align: center;
+    color: #4a5568;
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+}
+
+.formContainer {
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+}
+
+.loginButton {
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 0.5rem;
+    background-color: #4299e1;
+    color: white;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loginButton:hover {
+    background-color: #3182ce;
+    transform: translateY(-1px);
+}
+
+.loginButton:disabled {
+    background-color: #a0aec0;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.buttonContent {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.error {
+    margin-top: 1rem;
+    color: #e53e3e;
+    text-align: center;
+    font-size: 0.875rem;
+}
+
+@media (max-width: 640px) {
+    .content {
+        padding: 1.5rem;
+    }
+
+    .title {
+        font-size: 2rem;
+    }
+
+    .imageWrapper {
+        width: 150px;
+        height: 150px;
+    }
+}

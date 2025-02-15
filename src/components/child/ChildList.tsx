@@ -51,14 +51,14 @@ export const ChildList = () => {
                     onClick={() => handleSelectChild(child.id)}
                     className={style.childButton}
                 >
-                    {child.name}
+                    <span className={style.border}>{child.name}</span>
                 </button>
             ))}
             <button
                 onClick={() => router.push("/create-child")}
                 className={style.createChildButton}
             >
-                新しい子どもアカウントを作成
+                <span className={style.createBorder}>新しい子どもアカウントを作成</span>
             </button>
         </div>
     );

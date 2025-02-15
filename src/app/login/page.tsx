@@ -38,9 +38,9 @@ export default function Login() {
                         disabled={isLoading}
                         className={styles.loginButton}
                     >
-                        <div className={styles.buttonContent}>
-                            <span>{isLoading ? "ログイン中" : "Googleでログイン"}</span>
-                        </div>
+                        <span className={styles.buttonBorder}>
+                            {isLoading ? "ログイン中" : "Googleでログイン"}
+                        </span>
                     </button>
                     {error && <p className={styles.error}>{error}</p>}
                 </div>

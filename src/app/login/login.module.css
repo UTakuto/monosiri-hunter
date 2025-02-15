@@ -30,6 +30,9 @@
 .loginButton {
     width: 300px;
     height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background-color: #ff7530;
     color: #fffae6;
     font-size: 20px;
@@ -38,18 +41,17 @@
     border-radius: 5px;
     box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.25) inset;
     filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
 
-    &::before {
-        content: "";
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 285px;
-        height: 35px;
-        border: dashed 2px #ffe681;
-        border-radius: 4px;
-    }
+.buttonBorder {
+    display: block;
+    width: 290px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: dashed 2px #ffe681;
+    border-radius: 4px;
 }
 
 .selectContainer {
@@ -112,6 +114,9 @@
 .submitButton {
     width: 200px;
     height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background-color: #ff7530;
     color: #fffae6;
     font-size: 20px;
@@ -120,18 +125,17 @@
     border-radius: 5px;
     box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.25) inset;
     filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
 
-    &::before {
-        content: "";
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 185px;
-        height: 35px;
-        border: dashed 2px #ffe681;
-        border-radius: 4px;
-    }
+.submitBorder {
+    display: block;
+    width: 190px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: dashed 2px #ffe681;
+    border-radius: 4px;
 }
 
 .error {

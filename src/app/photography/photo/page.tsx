@@ -11,6 +11,11 @@ import "./photo.css";
 import { getAuth } from "firebase/auth";
 import { RequireAuth } from "@/components/auth/RequireAuth";
 
+// カスタムエラー型の定義を追加
+interface StorageError extends Error {
+    code?: string;
+}
+
 export default function Photo() {
     const router = useRouter();
     const [photo, setPhoto] = useState<string | null>(null);
@@ -44,13 +49,11 @@ export default function Photo() {
             const response = await fetch(compressedImage);
             const blob = await response.blob();
 
-            // ユーザーIDを含めたパスを生成
             const fileName = `photos/${auth.currentUser.uid}/${Date.now()}-${Math.random()
                 .toString(36)
                 .slice(2)}.webp`;
             const storageRef = ref(storage, fileName);
 
-            // メタデータを設定
             const metadata = {
                 contentType: "image/webp",
                 customMetadata: {
@@ -59,7 +62,6 @@ export default function Photo() {
                 },
             };
 
-            // アップロード（メタデータを含める）
             await uploadBytes(storageRef, blob, metadata);
             const downloadURL = await getDownloadURL(storageRef);
 
@@ -73,12 +75,19 @@ export default function Photo() {
             );
 
             router.push("./photo/result");
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error("アップロードエラー:", error);
-            if (error.code === "storage/unauthorized") {
-                alert("アップロード権限がありません。再度ログインしてください。");
+
+            // エラーの型チェック
+            if (error instanceof Error) {
+                const storageError = error as StorageError;
+                if (storageError.code === "storage/unauthorized") {
+                    alert("アップロード権限がありません。再度ログインしてください。");
+                } else {
+                    alert("アップロードに失敗しました。もう一度お試しください。");
+                }
             } else {
-                alert("アップロードに失敗しました。もう一度お試しください。");
+                alert("予期せぬエラーが発生しました。");
             }
         } finally {
             setUploading(false);

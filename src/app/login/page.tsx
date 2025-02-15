@@ -7,22 +7,19 @@ import { useRouter } from "next/navigation";
 import { getAuth } from "firebase/auth";
 
 export default function Login() {
+    const router = useRouter();
     const { signInWithGoogle, isLoading, error } = useAuth();
 
-    // const router = useRouter();
-    // const { signInWithGoogle, isLoading, error } = useAuth();
-
-    // useEffect(() => {
-    //     const auth = getAuth();
-    //     if (auth.currentUser) {
-    //         router.push("/");
-    //     }
-    // }, [router]);
+    useEffect(() => {
+        const auth = getAuth();
+        if (auth.currentUser) {
+            router.push("/");
+        }
+    }, [router]);
 
     return (
         <div className={styles.container}>
             <div className={styles.content}>
-                {/* <h1 className={styles.title}>ものしりハンター</h1> */}
                 <div className={styles.imageWrapper}>
                     <Image
                         src="/logo.png"

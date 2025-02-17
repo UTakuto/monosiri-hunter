@@ -1,4 +1,4 @@
-import { AuthProvider } from "@/components/auth/AuthProvider";
+import { AuthProvider } from "@/providers/AuthProvider";
 import { Kosugi } from "next/font/google";
 import "./globals.css";
 
@@ -16,9 +16,9 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="ja">
-            <AuthProvider>
-                <body className={`${kosugi.variable}`}>{children}</body>
-            </AuthProvider>
+            <body className={kosugi.className}>
+                <AuthProvider>{children}</AuthProvider>
+            </body>
         </html>
     );
 }

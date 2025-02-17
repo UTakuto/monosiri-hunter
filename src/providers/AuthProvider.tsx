@@ -1,26 +1,66 @@
 "use client";
-import { createContext, useContext, useEffect, useState, ReactNode } from "react";
-import { getAuth, getRedirectResult, onAuthStateChanged, User } from "firebase/auth";
+import { createContext, useEffect, useState, ReactNode } from "react";
+import {
+    getAuth,
+    getRedirectResult,
+    onAuthStateChanged,
+    User,
+    GoogleAuthProvider,
+    signInWithRedirect,
+} from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { storage } from "@/utils/storage";
 import { useRouter } from "next/navigation";
 
-type AuthContextType = {
+// 認証コンテキストの型定義
+interface AuthContextType {
     user: User | null;
     loading: boolean;
-};
+    signInWithGoogle: () => Promise<void>;
+    error: string | null;
+}
 
-const AuthContext = createContext<AuthContextType>({
+// デフォルト値を持つコンテキストを作成
+export const AuthContext = createContext<AuthContextType>({
     user: null,
     loading: true,
+    signInWithGoogle: async () => {},
+    error: null,
 });
 
-export function AuthProvider({ children }: { children: ReactNode }) {
+// AuthProviderコンポーネントのprops型
+interface Props {
+    children: ReactNode;
+}
+
+export function AuthProvider({ children }: Props) {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
     const router = useRouter();
 
+    // Google認証処理
+    const signInWithGoogle = async () => {
+        try {
+            setLoading(true);
+            setError(null);
+            const auth = getAuth();
+            const provider = new GoogleAuthProvider();
+            await signInWithRedirect(auth, provider);
+        } catch (error: unknown) {
+            console.error("認証エラー:", error);
+            if (error instanceof Error) {
+                setError(error.message);
+            } else {
+                setError("予期せぬエラーが発生しました");
+            }
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // 認証状態の監視とリダイレクト後の処理
     useEffect(() => {
         const auth = getAuth();
 
@@ -49,6 +89,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             })
             .catch((error) => {
                 console.error("リダイレクト後のエラー:", error);
+                setError("認証後の処理に失敗しました");
             });
 
         // 認証状態の監視
@@ -57,20 +98,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             setLoading(false);
         });
 
+        // クリーンアップ関数
         return () => unsubscribe();
     }, [router]);
 
-    return (
-        <AuthContext.Provider value={{ user, loading }}>
-            {!loading && children}
-        </AuthContext.Provider>
-    );
-}
+    const value = {
+        user,
+        loading,
+        signInWithGoogle,
+        error,
+    };
 
-export const useAuth = () => {
-    const context = useContext(AuthContext);
-    if (!context) {
-        throw new Error("useAuth must be used within an AuthProvider");
-    }
-    return context;
-};
+    return <AuthContext.Provider value={value}>{!loading && children}</AuthContext.Provider>;
+}

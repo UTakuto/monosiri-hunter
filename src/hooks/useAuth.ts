@@ -1,8 +1,8 @@
 import { useState, useCallback } from "react";
 import { getAuth, signInWithRedirect, GoogleAuthProvider } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase";
-import { storage } from "@/utils/storage";
+// import { doc, setDoc } from "firebase/firestore";
+// import { db } from "@/lib/firebase";
+// import { storage } from "@/utils/storage";
 import { useRouter } from "next/navigation";
 
 // カスタムエラー型の定義

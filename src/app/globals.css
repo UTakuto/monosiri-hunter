@@ -47,6 +47,7 @@ body {
 }
 
 body {
+    height: 100svh;
     font-family: var(--font-kosugi), serif;
     font-weight: 400;
     font-style: normal;

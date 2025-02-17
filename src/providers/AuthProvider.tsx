@@ -1,3 +1,4 @@
+"uae client";
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 import { getAuth, getRedirectResult, onAuthStateChanged, User } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";

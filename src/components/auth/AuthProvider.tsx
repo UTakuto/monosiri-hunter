@@ -1,70 +1,99 @@
 "use client";
-
-import { createContext, useContext, useEffect, useState, ReactNode } from "react";
-import { getAuth, onAuthStateChanged, User } from "firebase/auth";
+import { createContext, useEffect, useState, ReactNode } from "react";
+import {
+    getAuth,
+    getRedirectResult,
+    onAuthStateChanged,
+    User,
+    GoogleAuthProvider,
+    signInWithRedirect,
+} from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+import { storage } from "@/utils/storage";
 import { useRouter } from "next/navigation";
 
-type AuthContextType = {
+interface AuthContextType {
     user: User | null;
     loading: boolean;
-};
+    signInWithGoogle: () => Promise<void>;
+    error: string | null;
+}
 
-const AuthContext = createContext<AuthContextType>({
+export const AuthContext = createContext<AuthContextType>({
     user: null,
     loading: true,
+    signInWithGoogle: async () => {},
+    error: null,
 });
 
 export function AuthProvider({ children }: { children: ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
     const router = useRouter();
+    const auth = getAuth();
+
+    const signInWithGoogle = async () => {
+        try {
+            setLoading(true);
+            setError(null);
+            const provider = new GoogleAuthProvider();
+            await signInWithRedirect(auth, provider);
+        } catch (error) {
+            console.error("認証エラー:", error);
+            setError("ログインに失敗しました");
+        }
+    };
 
     useEffect(() => {
         const auth = getAuth();
+        const handleRedirectResult = async () => {
+            try {
+                const result = await getRedirectResult(auth);
+                console.log("Redirect result:", result);
+
+                if (result?.user) {
+                    console.log("User after redirect:", result.user);
+
+                    await setDoc(
+                        doc(db, "users", result.user.uid),
+                        {
+                            name: result.user.displayName,
+                            email: result.user.email,
+                            photoURL: result.user.photoURL,
+                            lastLogin: new Date().toISOString(),
+                        },
+                        { merge: true }
+                    );
+
+                    storage.setParentId(result.user.uid);
+
+                    if (window.location.pathname === "/login") {
+                        console.log("Redirecting to select-child");
+                        router.push("/select-child");
+                    }
+                }
+            } catch (error) {
+                console.error("Redirect result error:", error);
+                setError("認証処理に失敗しました");
+            }
+        };
+
+        handleRedirectResult();
 
         const unsubscribe = onAuthStateChanged(auth, (user) => {
-            if (user) {
-                // ユーザーが認証済みの場合
-                setUser(user);
-            } else {
-                // 未認証の場合
-                setUser(null);
-                // ログインページ以外にいる場合はリダイレクト
-                if (window.location.pathname !== "/login") {
-                    router.push("/login");
-                }
-            }
+            console.log("Auth state changed:", user);
+            setUser(user);
             setLoading(false);
         });
 
-        // クリーンアップ関数
         return () => unsubscribe();
     }, [router]);
 
-    // ローディング中はnullを返す
-    if (loading) {
-        return (
-            <div
-                style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    height: "100vh",
-                }}
-            >
-                読み込み中...
-            </div>
-        );
-    }
-
-    return <AuthContext.Provider value={{ user, loading }}>{children}</AuthContext.Provider>;
+    return (
+        <AuthContext.Provider value={{ user, loading, signInWithGoogle, error }}>
+            {children}
+        </AuthContext.Provider>
+    );
 }
-
-// カスタムフックとしてエクスポート
-export const useAuth = () => {
-    const context = useContext(AuthContext);
-    if (!context) {
-        throw new Error("useAuth must be used within an AuthProvider");
-    }
-    return context;
-};

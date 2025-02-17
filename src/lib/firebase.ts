@@ -1,4 +1,5 @@
 import { initializeApp, getApps } from "firebase/app";
+import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
@@ -11,9 +12,14 @@ const firebaseConfig = {
     appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-// アプリが初期化されていない場合のみ初期化
-const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
+// デバッグ用のログ追加
+if (!firebaseConfig.apiKey || !firebaseConfig.authDomain) {
+    console.error("Firebase設定が不完全です:", firebaseConfig);
+}
+
+const app = !getApps().length ? initializeApp(firebaseConfig) : getApps()[0];
+const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage(app);
 
-export { app, db, storage };
+export { app, auth, db, storage };

@@ -35,7 +35,7 @@ export const getAdditionalLinePosition = (
                 y: rect.y + rect.height,
             },
         };
-        console.log("四角形の4つの角の座標:", corners);
+        // console.log("四角形の4つの角の座標:", corners);
         return corners;
     }
 };

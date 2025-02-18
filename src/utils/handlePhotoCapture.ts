@@ -20,11 +20,11 @@ export const handlePhotoCapture = async (
         const canvas = canvasRef.current;
         const imageData = canvas.toDataURL("image/jpeg").split(",")[1];
 
-        console.log("送信する画像データ長:", imageData.length);
-        console.log("送信するcorners:", corners);
+        // console.log("送信する画像データ長:", imageData.length);
+        // console.log("送信するcorners:", corners);
 
         const result = await cropImageWithVisionAPI(imageData, corners);
-        console.log("API完全なレスポンス:", result);
+        // console.log("API完全なレスポンス:", result);
 
         if (!result?.responses?.[0]?.cropHintsAnnotation?.cropHints?.[0]) {
             throw new Error("有効なクロップヒントが返されませんでした");

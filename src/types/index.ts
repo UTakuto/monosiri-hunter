@@ -11,3 +11,17 @@ export interface Child {
     createdAt: string;
     collection: string[];
 }
+
+export interface WordData {
+    id: string;
+    word: string;
+    description: string;
+    imageUrl: string | null;
+    shuffled?: string[];
+}
+
+export interface PhotoQuizProps {
+    words: WordData[];
+    onComplete: () => void;
+    onClose: () => void;
+}

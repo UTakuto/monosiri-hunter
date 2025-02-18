@@ -1,26 +1,27 @@
 "use client";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { getAuth } from "firebase/auth";
 import { db } from "@/lib/firebase";
 import { getDocs, collection, query, orderBy } from "firebase/firestore";
-import style from "./pictureBook.module.css";
-import Arrow from "@/components/button/arrow/arrow";
+import { usePhotoQuiz } from "@/hooks/usePhotoQuiz";
+import { WordData } from "@/types";
 import { RequireAuth } from "@/components/auth/RequireAuth";
-
-interface WordData {
-    id: string;
-    word: string;
-    description: string;
-    imageUrl: string | null;
-}
+import { PhotoQuiz } from "@/components/quiz/PhotoQuiz";
+import Arrow from "@/components/button/arrow/arrow";
+import style from "./pictureBook.module.css";
+import { WarningModal } from "@/components/warningModal/warningModal";
 
 export default function PictureBook() {
+    const router = useRouter();
     const [currentPage, setCurrentPage] = useState(0);
     const itemsPerPage = 2;
     const [words, setWords] = useState<WordData[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const { showQuiz, quizWords, startQuiz, endQuiz, showWarning, closeWarning } =
+        usePhotoQuiz(words);
 
     useEffect(() => {
         const fetchWords = async () => {
@@ -71,8 +72,38 @@ export default function PictureBook() {
         }
     };
 
+    // ゲームを開始する関数を追加
+    const handleRetryGame = (word: WordData) => {
+        // ゲーム用のデータを準備
+        const gameData = {
+            original: word.word,
+            shuffled: word.word.split(""), // 文字を配列に分割
+        };
+
+        // ゲームデータをローカルストレージに保存
+        localStorage.setItem("gameTarget", JSON.stringify(gameData));
+
+        // ゲーム画面に遷移
+        router.push("/game");
+    };
+
+    const handleQuizComplete = () => {
+        console.log("Quiz completed");
+        setTimeout(endQuiz, 2000);
+    };
+
+    // 正解済みの単語の数を取得する関数を追加
+    const getCorrectWordsCount = () => {
+        return words.filter((word) => {
+            const savedData = localStorage.getItem(`word_${word.id}`);
+            if (!savedData) return false;
+            const parsedData = JSON.parse(savedData);
+            return parsedData?.isCorrect === true;
+        }).length;
+    };
+
     if (loading) {
-        return <div className={style.loading}>読み込み中...</div>;
+        return <div className={style.loading}>読み込み中</div>;
     }
 
     if (error) {
@@ -106,6 +137,13 @@ export default function PictureBook() {
                                         )}
                                     </div>
                                     <p className={style.wordDescription}>{word.description}</p>
+                                    {/* ゲームをやり直すボタンを追加 */}
+                                    <button
+                                        onClick={() => handleRetryGame(word)}
+                                        className={style.retryButton}
+                                    >
+                                        もういちどあそぶ
+                                    </button>
                                 </div>
                             ))}
                     </div>
@@ -131,6 +169,25 @@ export default function PictureBook() {
                         </div>
                     </div>
                 </div>
+                <button onClick={startQuiz} className={style.startQuizButton}>
+                    くいずをはじめる
+                </button>
+                {showQuiz && quizWords.length > 0 && (
+                    <div className={style.quizContainer}>
+                        <div className={style.quizOverlay}>
+                            <PhotoQuiz
+                                words={quizWords}
+                                onComplete={handleQuizComplete}
+                                onClose={endQuiz}
+                            />
+                        </div>
+                    </div>
+                )}
+                {showWarning && (
+                    <div className={style.warningModalContainer}>
+                        <WarningModal onClose={closeWarning} />
+                    </div>
+                )}
             </RequireAuth>
         </>
     );

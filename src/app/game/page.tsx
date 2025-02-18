@@ -23,6 +23,9 @@ export default function Game() {
     const [gameData, setGameData] = useState<GameData | null>(null);
     const [selectedChars, setSelectedChars] = useState<string[]>([]);
     const [shuffledCharsState, setShuffledCharsState] = useState<ShuffledChar[]>([]);
+    const [showHint, setShowHint] = useState(false);
+    const [attempts, setAttempts] = useState(0);
+    const MAX_ATTEMPTS = 2; // 最大試行回数
 
     useEffect(() => {
         if (!gameData?.shuffled) return;
@@ -103,10 +106,32 @@ export default function Game() {
     };
 
     const handleSubmit = () => {
-        if (gameData && selectedChars.join("") === gameData.original) {
+        if (!gameData) return;
+
+        const isCorrect = selectedChars.join("") === gameData.original;
+        setAttempts((prev) => prev + 1);
+
+        if (isCorrect) {
             localStorage.setItem("wordToRegister", gameData.original);
             router.push("/game/result");
+        } else if (attempts >= MAX_ATTEMPTS - 1) {
+            // 最大試行回数に達した場合は、入力された単語をそのまま保存
+            localStorage.setItem("wordToRegister", selectedChars.join(""));
+            router.push("/game/result");
+        } else {
+            // 不正解の場合、ヒントを表示
+            setShowHint(true);
         }
+    };
+
+    // ヒントを生成する関数
+    const generateHint = (word: string): string => {
+        return word
+            .split("")
+            .map((char, index) => {
+                return index === 0 || index === word.length - 1 ? char : "○";
+            })
+            .join("");
     };
 
     return (
@@ -142,6 +167,16 @@ export default function Game() {
                     </div>
                 </div>
                 <div className={style.gameResultContainer}>
+                    {showHint && (
+                        <div className={style.hintContainer}>
+                            <p className={style.hintText}>
+                                ヒント: {generateHint(gameData?.original || "")}
+                            </p>
+                            <p className={style.attemptsText}>
+                                あと{MAX_ATTEMPTS - attempts}回チャレンジできます
+                            </p>
+                        </div>
+                    )}
                     <div className={style.gameSelectContainer}>
                         <div className={style.gameText}>
                             {shuffledCharsState.map((charData) => (

@@ -1,0 +1,33 @@
+.modal {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 12px;
+    text-align: center;
+    max-width: 90%;
+    width: 400px;
+}
+
+.modal h2 {
+    color: #ff7530;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.modal p {
+    margin-bottom: 1.5rem;
+    font-size: 1.2rem;
+}
+
+.button {
+    background-color: #ff7530;
+    color: white;
+    border: none;
+    padding: 0.8rem 2rem;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: #ff8c4a;
+}

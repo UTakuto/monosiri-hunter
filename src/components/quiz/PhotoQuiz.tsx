@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { PhotoQuizProps } from "@/types";
-import style from "./photoQuiz.module.css";
+import style from "./PhotoQuiz.module.css";
 
 export const PhotoQuiz = ({ words, onComplete, onClose }: PhotoQuizProps) => {
     const [currentIndex, setCurrentIndex] = useState(0);

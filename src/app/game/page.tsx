@@ -6,6 +6,7 @@ import { shuffle } from "@/utils/shuffle";
 import style from "./game.module.css";
 import Arrow from "@/components/button/arrow/arrow";
 import { RequireAuth } from "@/components/auth/RequireAuth";
+import { speakText } from "@/utils/speak";
 
 interface GameData {
     id: string;
@@ -70,6 +71,9 @@ export default function Game() {
 
     const handleCharClick = (char: string, id: number) => {
         if (selectedChars.length >= (gameData?.original.length || 0)) return;
+
+        // 文字を選択したら読み上げる
+        speakText(char);
 
         setShuffledCharsState((prev) =>
             prev.map((c) => (c.id === id ? { ...c, isSelected: true } : c))

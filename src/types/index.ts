@@ -15,6 +15,7 @@ export interface Child {
 export interface WordData {
     id: string;
     word: string;
+    correctWord: string;
     description: string;
     imageUrl: string | null;
     shuffled?: string[];

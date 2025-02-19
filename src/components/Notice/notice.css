@@ -49,6 +49,14 @@
     font-style: normal;
 }
 
+.alertText {
+    color: #333;
+    font-size: 16px;
+    font-family: var(--font-kosugi), serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
 .smartImage {
     width: 230px;
     height: 230px;

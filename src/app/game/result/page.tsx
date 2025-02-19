@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { getCharacterRow } from "@/utils/getCharacterRow";
 import { SuccessModal } from "@/components/modal/SuccessModal";
-import { addWord } from "@/components/Word/AddWord";
+import { updateWord } from "@/components/Word/UpDateWord";
 import { WordData } from "@/types/word";
 import style from "../game.module.css";
 import { RequireAuth } from "@/components/auth/RequireAuth";
@@ -16,6 +16,7 @@ export default function GameResult() {
     const [description, setDescription] = useState<string | null>(null);
     const [imageUrl, setImageUrl] = useState<string | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [correctWord, setCorrectWord] = useState<string | null>(null);
 
     useEffect(() => {
         setWord(localStorage.getItem("wordToRegister"));
@@ -25,10 +26,17 @@ export default function GameResult() {
             const parsed = JSON.parse(savedData);
             setImageUrl(parsed.imageUrl);
         }
+
+        // 正解の単語を取得
+        const gameTarget = localStorage.getItem("gameTarget");
+        if (gameTarget) {
+            const { original } = JSON.parse(gameTarget);
+            setCorrectWord(original);
+        }
     }, []);
 
     const handleRegister = async () => {
-        if (!word?.trim() || !description?.trim() || !imageUrl?.trim()) {
+        if (!word?.trim() || !correctWord) {
             setError("必要な情報がそろっていません");
             return console.log(error);
         }
@@ -37,32 +45,54 @@ export default function GameResult() {
         setError(null);
 
         try {
-            const wordToAdd: WordData = {
+            // 既存のデータで更新するためのオブジェクトを作成
+            const wordToUpdate: WordData = {
                 word: word.trim(),
-                description: description.trim(),
-                imageUrl: imageUrl.trim(),
-                createdAt: new Date(),
+                correctWord: correctWord.trim(),
+                description: description?.trim() || "",
+                imageUrl: imageUrl?.trim() || "",
+                isCorrect: word.trim() === correctWord.trim(),
                 updatedAt: new Date(),
+                createdAt: new Date(),
             };
 
-            const docId = await addWord(wordToAdd);
+            // ゲームデータからIDを取得
+            const gameTarget = localStorage.getItem("gameTarget");
+            const gameData = gameTarget ? JSON.parse(gameTarget) : null;
+            const docId = gameData?.id;
 
             if (docId) {
+                // 既存のドキュメントを更新
+                await updateWord(docId, wordToUpdate);
+
                 // ローカルストレージのクリーンアップ
                 localStorage.removeItem("wordToRegister");
                 localStorage.removeItem("description");
                 localStorage.removeItem("analysisTarget");
+                localStorage.removeItem("gameTarget");
+
+                // 正解記録を保存
+                if (wordToUpdate.isCorrect) {
+                    localStorage.setItem(
+                        `gameData_${docId}`,
+                        JSON.stringify({
+                            isCorrect: true,
+                            completedAt: new Date().toISOString(),
+                        })
+                    );
+                }
 
                 // 状態のリセット
                 setWord(null);
                 setDescription(null);
                 setImageUrl(null);
+                setCorrectWord(null);
 
                 // 成功モーダルの表示
                 setIsModalOpen(true);
             }
         } catch (err: unknown) {
-            console.error("登録エラー:", err);
+            console.error("更新エラー:", err);
             setError(err instanceof Error ? err.message : "予期せぬエラーが発生しました");
         } finally {
             setLoading(false);

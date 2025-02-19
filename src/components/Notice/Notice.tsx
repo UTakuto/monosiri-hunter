@@ -20,6 +20,7 @@ export default function Notice() {
                 />
                 <div className="noticeTextWrap">
                     <p className="noticeText">よこにたおしてもってね</p>
+                    <p className="noticeText">しょうおんもーどをおふにしてください</p>
                     <Image src={"/ornament.png"} alt="" width={400} height={100} />
                 </div>
             </div>

@@ -6,11 +6,13 @@ import Arrow from "@/components/button/arrow/arrow";
 import gameStyle from "@/app/game/game.module.css";
 import { getCharacterRow } from "@/utils/getCharacterRow";
 import { toHiragana } from "@/utils/kanaConverter";
+import { speakText } from "@/utils/speak";
 
 interface AnalysisResult {
     name: string;
     description: string;
     imageUrl: string;
+    labels?: string[]; // オプショナルに変更
 }
 
 export default function Result() {
@@ -76,6 +78,7 @@ export default function Result() {
                     name,
                     description: description || "説明はありません",
                     imageUrl,
+                    labels: [], // 空の配列を設定
                 });
             } catch (error) {
                 console.error("分析エラー:", error);
@@ -142,6 +145,12 @@ export default function Result() {
         }
     };
 
+    const handleSpeak = () => {
+        if (result?.name) {
+            speakText(result.name);
+        }
+    };
+
     return (
         <>
             <Arrow backPath="/photography/photo" />
@@ -178,6 +187,15 @@ export default function Result() {
                                     className={style.reAnalyzeButton}
                                 >
                                     もういちどしらべる
+                                </button>
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleSpeak();
+                                    }}
+                                    className={style.speakButton}
+                                >
+                                    よみあげる
                                 </button>
                             </div>
                         </div>

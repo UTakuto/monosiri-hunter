@@ -23,6 +23,7 @@ export default function PictureBook() {
     const { showQuiz, quizWords, startQuiz, endQuiz, showWarning, closeWarning } =
         usePhotoQuiz(words);
 
+    // useEffect内のfetchWords関数を修正
     useEffect(() => {
         const fetchWords = async () => {
             const auth = getAuth();
@@ -42,6 +43,7 @@ export default function PictureBook() {
                     return {
                         id: doc.id,
                         word: data.word,
+                        correctWord: data.correctWord, // APIの名前を追加
                         description: data.description,
                         imageUrl: data.imageUrl || null,
                     };
@@ -60,6 +62,24 @@ export default function PictureBook() {
         fetchWords();
     }, []);
 
+    const handleRetryGame = (word: WordData) => {
+        const gameData = {
+            id: word.id,
+            original: word.word,
+            shuffled: word.word.split(""),
+        };
+
+        // ゲームデータをローカルストレージに保存
+        localStorage.setItem("gameTarget", JSON.stringify(gameData));
+
+        // Firebaseのデータをローカルストレージに保存
+        localStorage.setItem("apiWord", word.correctWord);
+        localStorage.setItem("description", word.description);
+        localStorage.setItem("analysisTarget", JSON.stringify({ imageUrl: word.imageUrl }));
+
+        router.push("/game");
+    };
+
     const handleNext = () => {
         if ((currentPage + 1) * itemsPerPage < words.length) {
             setCurrentPage(currentPage + 1);
@@ -72,34 +92,9 @@ export default function PictureBook() {
         }
     };
 
-    // ゲームを開始する関数を追加
-    const handleRetryGame = (word: WordData) => {
-        // ゲーム用のデータを準備
-        const gameData = {
-            original: word.word,
-            shuffled: word.word.split(""), // 文字を配列に分割
-        };
-
-        // ゲームデータをローカルストレージに保存
-        localStorage.setItem("gameTarget", JSON.stringify(gameData));
-
-        // ゲーム画面に遷移
-        router.push("/game");
-    };
-
     const handleQuizComplete = () => {
         console.log("Quiz completed");
         setTimeout(endQuiz, 2000);
-    };
-
-    // 正解済みの単語の数を取得する関数を追加
-    const getCorrectWordsCount = () => {
-        return words.filter((word) => {
-            const savedData = localStorage.getItem(`word_${word.id}`);
-            if (!savedData) return false;
-            const parsedData = JSON.parse(savedData);
-            return parsedData?.isCorrect === true;
-        }).length;
     };
 
     if (loading) {

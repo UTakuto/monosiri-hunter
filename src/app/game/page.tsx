@@ -8,6 +8,7 @@ import Arrow from "@/components/button/arrow/arrow";
 import { RequireAuth } from "@/components/auth/RequireAuth";
 
 interface GameData {
+    id: string;
     original: string;
     shuffled: string[];
 }
@@ -108,18 +109,43 @@ export default function Game() {
     const handleSubmit = () => {
         if (!gameData) return;
 
-        const isCorrect = selectedChars.join("") === gameData.original;
+        const selectedWord = selectedChars.join("");
+        const apiName = localStorage.getItem("apiWord");
+        const isCorrect = selectedWord === gameData.original;
+
+        // 正解の場合
+        if (isCorrect) {
+            setShowHint(false);
+            localStorage.setItem("wordToRegister", gameData.original);
+            localStorage.setItem(
+                `gameData_${gameData.id}`,
+                JSON.stringify({
+                    isCorrect: true,
+                    completedAt: new Date().toISOString(),
+                })
+            );
+            router.push("/game/result");
+            return;
+        }
+
+        // 最大試行回数に達しているか確認
+        const isMaxAttempts = attempts >= MAX_ATTEMPTS - 1;
+
+        // 不正解の場合
+        if (isMaxAttempts) {
+            // 最大試行回数に達している場合は結果画面へ
+            setShowHint(false);
+            localStorage.setItem("wordToRegister", selectedWord);
+            localStorage.setItem("correctWord", gameData.original);
+            router.push("/game/result");
+            return;
+        }
+
+        // 試行回数をインクリメント
         setAttempts((prev) => prev + 1);
 
-        if (isCorrect) {
-            localStorage.setItem("wordToRegister", gameData.original);
-            router.push("/game/result");
-        } else if (attempts >= MAX_ATTEMPTS - 1) {
-            // 最大試行回数に達した場合は、入力された単語をそのまま保存
-            localStorage.setItem("wordToRegister", selectedChars.join(""));
-            router.push("/game/result");
-        } else {
-            // 不正解の場合、ヒントを表示
+        // 不正解でかつAPIの名前と一致しない場合のみヒントを表示
+        if (selectedWord !== apiName) {
             setShowHint(true);
         }
     };
@@ -167,10 +193,10 @@ export default function Game() {
                     </div>
                 </div>
                 <div className={style.gameResultContainer}>
-                    {showHint && (
+                    {showHint && attempts < MAX_ATTEMPTS && (
                         <div className={style.hintContainer}>
                             <p className={style.hintText}>
-                                ヒント: {generateHint(gameData?.original || "")}
+                                ヒント: {generateHint(localStorage.getItem("apiWord") || "")}
                             </p>
                             <p className={style.attemptsText}>
                                 あと{MAX_ATTEMPTS - attempts}回チャレンジできます
@@ -209,14 +235,14 @@ export default function Game() {
                             <button
                                 onClick={handleSubmit}
                                 className={`
-                                ${style.gameSubmitButton}
-                                ${
-                                    selectedChars.length !== gameData?.original.length
-                                        ? style.gameSubmitButtonDisabled
-                                        : ""
-                                }
-                            `}
-                                disabled={selectedChars.length !== gameData?.original.length}
+                                    ${style.gameSubmitButton}
+                                    ${
+                                        selectedChars.length !== gameData?.original.length
+                                            ? style.gameSubmitButtonDisabled
+                                            : ""
+                                    }
+                                `}
+                                disabled={selectedChars.length !== gameData?.original.length} // 文字数が揃っていれば常に押せる
                             >
                                 かんせい
                             </button>

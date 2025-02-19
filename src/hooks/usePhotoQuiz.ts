@@ -9,25 +9,26 @@ export const usePhotoQuiz = (words: WordData[]) => {
     const startQuiz = useCallback(() => {
         if (words.length === 0) return;
 
-        // 正解済みの単語を取得
+        // 物体の名前並べ替えで正解した単語を取得
         const correctWords = words.filter((word) => {
-            const savedData = localStorage.getItem(`word_${word.id}`);
-            if (!savedData) return false;
-            const parsedData = JSON.parse(savedData);
+            const gameData = localStorage.getItem(`gameData_${word.id}`);
+            if (!gameData) return false;
+            const parsedData = JSON.parse(gameData);
             return parsedData?.isCorrect === true;
         });
 
+        // 正解がない場合は警告を表示
         if (correctWords.length === 0) {
             setShowWarning(true);
             return;
         }
 
-        // 正解単語からランダムに選択
+        // 正解した単語からランダムに最大3つ選択
         const selectedWords = correctWords
             .sort(() => Math.random() - 0.5)
             .slice(0, Math.min(3, correctWords.length));
 
-        console.log("Starting quiz with correct words:", selectedWords);
+        console.log("Starting quiz with words:", selectedWords);
         setQuizWords(selectedWords);
         setShowQuiz(true);
     }, [words]);

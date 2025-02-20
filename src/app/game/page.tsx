@@ -25,7 +25,6 @@ export default function Game() {
     const [gameData, setGameData] = useState<GameData | null>(null);
     const [selectedChars, setSelectedChars] = useState<string[]>([]);
     const [shuffledCharsState, setShuffledCharsState] = useState<ShuffledChar[]>([]);
-    const [showHint, setShowHint] = useState(false);
     const [attempts, setAttempts] = useState(0);
     const MAX_ATTEMPTS = 2; // 最大試行回数
 
@@ -45,6 +44,7 @@ export default function Game() {
         const loadGameData = () => {
             try {
                 const savedData = localStorage.getItem("gameTarget");
+
                 if (savedData && mounted) {
                     const parsedData = JSON.parse(savedData);
                     if (parsedData?.original && parsedData?.shuffled) {
@@ -110,16 +110,17 @@ export default function Game() {
         setSelectedChars(newSelectedChars);
     };
 
+    // handleSubmit関数を修正
     const handleSubmit = () => {
         if (!gameData) return;
-
         const selectedWord = selectedChars.join("");
-        const apiName = localStorage.getItem("apiWord");
         const isCorrect = selectedWord === gameData.original;
+
+        // 最大試行回数に達しているか確認
+        const isMaxAttempts = attempts >= MAX_ATTEMPTS - 1;
 
         // 正解の場合
         if (isCorrect) {
-            setShowHint(false);
             localStorage.setItem("wordToRegister", gameData.original);
             localStorage.setItem(
                 `gameData_${gameData.id}`,
@@ -132,36 +133,16 @@ export default function Game() {
             return;
         }
 
-        // 最大試行回数に達しているか確認
-        const isMaxAttempts = attempts >= MAX_ATTEMPTS - 1;
-
         // 不正解の場合
         if (isMaxAttempts) {
-            // 最大試行回数に達している場合は結果画面へ
-            setShowHint(false);
             localStorage.setItem("wordToRegister", selectedWord);
             localStorage.setItem("correctWord", gameData.original);
             router.push("/game/result");
             return;
         }
 
-        // 試行回数をインクリメント
+        // 試行回数をインクリメントしてヒントを表示
         setAttempts((prev) => prev + 1);
-
-        // 不正解でかつAPIの名前と一致しない場合のみヒントを表示
-        if (selectedWord !== apiName) {
-            setShowHint(true);
-        }
-    };
-
-    // ヒントを生成する関数
-    const generateHint = (word: string): string => {
-        return word
-            .split("")
-            .map((char, index) => {
-                return index === 0 || index === word.length - 1 ? char : "○";
-            })
-            .join("");
     };
 
     return (
@@ -197,16 +178,6 @@ export default function Game() {
                     </div>
                 </div>
                 <div className={style.gameResultContainer}>
-                    {showHint && attempts < MAX_ATTEMPTS && (
-                        <div className={style.hintContainer}>
-                            <p className={style.hintText}>
-                                ヒント: {generateHint(localStorage.getItem("apiWord") || "")}
-                            </p>
-                            <p className={style.attemptsText}>
-                                あと{MAX_ATTEMPTS - attempts}回チャレンジできます
-                            </p>
-                        </div>
-                    )}
                     <div className={style.gameSelectContainer}>
                         <div className={style.gameText}>
                             {shuffledCharsState.map((charData) => (

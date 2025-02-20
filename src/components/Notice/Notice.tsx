@@ -22,7 +22,8 @@ export default function Notice() {
                     <p className="noticeText">よこにたおしてもってね</p>
                     <Image src={"/ornament.png"} alt="" width={400} height={100} />
                 </div>
-                <p className="alertText">しょうおんもーどをおふにしてください</p>
+                <p className="alertText">※しょうおんもーどをおふにしてください</p>
+                <p className="alertText">※たてむきろっくをかいじょしてください</p>
             </div>
             <Image className="handImage" src={"/handIphone.png"} alt="" width={100} height={100} />
         </div>

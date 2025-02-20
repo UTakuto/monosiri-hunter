@@ -73,6 +73,7 @@ export default function Result() {
                     .replace(/。$/, "");
 
                 localStorage.setItem("description", description);
+                localStorage.setItem("apiWord", name); // 物体の名前を保存
 
                 setResult({
                     name,

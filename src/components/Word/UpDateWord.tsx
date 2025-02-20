@@ -1,15 +1,19 @@
-import { getAuth } from "firebase/auth";
-import { doc, updateDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase";
-import { WordData } from "@/types/word";
+import { db, auth } from "@/lib/firebase";
+import { doc, setDoc } from "firebase/firestore";
+import { WordData } from "@/types/word"; // WordData型をインポート
 
-export const updateWord = async (docId: string, wordData: Partial<WordData>) => {
-    const auth = getAuth();
-    if (!auth.currentUser) {
-        throw new Error("認証が必要です");
+export const updateWord = async (wordId: string, wordData: WordData) => {
+    try {
+        const user = auth.currentUser;
+        if (!user) {
+            throw new Error("ユーザー認証が必要です");
+        }
+
+        const wordRef = doc(db, `users/${user.uid}/words/${wordId}`);
+        await setDoc(wordRef, wordData);
+        return true;
+    } catch (error) {
+        console.error("Word update error:", error);
+        return false;
     }
-
-    const wordRef = doc(db, "users", auth.currentUser.uid, "words", docId);
-    await updateDoc(wordRef, wordData);
-    return docId;
 };

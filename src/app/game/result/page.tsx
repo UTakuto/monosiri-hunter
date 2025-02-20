@@ -7,6 +7,7 @@ import { updateWord } from "@/components/Word/UpDateWord";
 import { WordData } from "@/types/word";
 import style from "../game.module.css";
 import { RequireAuth } from "@/components/auth/RequireAuth";
+import { auth } from "@/lib/firebase";
 
 export default function GameResult() {
     const router = useRouter();
@@ -36,64 +37,85 @@ export default function GameResult() {
     }, []);
 
     const handleRegister = async () => {
-        if (!word?.trim() || !correctWord) {
-            setError("必要な情報がそろっていません");
-            return console.log(error);
-        }
-
-        setLoading(true);
-        setError(null);
-
         try {
-            // 既存のデータで更新するためのオブジェクトを作成
+            setLoading(true);
+            setError(null);
+
+            console.log(error);
+
+            if (!word?.trim()) {
+                throw new Error("単語が入力されていません");
+            }
+
+            const user = auth.currentUser;
+            if (!user) {
+                throw new Error("ユーザー認証が必要です");
+            }
+
+            // 更新用のデータを作成
             const wordToUpdate: WordData = {
                 word: word.trim(),
-                correctWord: correctWord.trim(),
+                correctWord: correctWord?.trim() || word.trim(),
                 description: description?.trim() || "",
                 imageUrl: imageUrl?.trim() || "",
-                isCorrect: word.trim() === correctWord.trim(),
-                updatedAt: new Date(),
+                isCorrect: word.trim() === correctWord?.trim(),
                 createdAt: new Date(),
+                updatedAt: new Date(),
+                userId: user.uid,
             };
 
-            // ゲームデータからIDを取得
-            const gameTarget = localStorage.getItem("gameTarget");
-            const gameData = gameTarget ? JSON.parse(gameTarget) : null;
-            const docId = gameData?.id;
+            let documentId: string;
 
-            if (docId) {
-                // 既存のドキュメントを更新
-                await updateWord(docId, wordToUpdate);
+            // LocalStorageから既存のwordIdを取得
+            const existingWordId = localStorage.getItem("currentWordId");
 
-                // ローカルストレージのクリーンアップ
-                localStorage.removeItem("wordToRegister");
-                localStorage.removeItem("description");
-                localStorage.removeItem("analysisTarget");
-                localStorage.removeItem("gameTarget");
-
-                // 正解記録を保存
-                if (wordToUpdate.isCorrect) {
-                    localStorage.setItem(
-                        `gameData_${docId}`,
-                        JSON.stringify({
-                            isCorrect: true,
-                            completedAt: new Date().toISOString(),
-                        })
-                    );
-                }
-
-                // 状態のリセット
-                setWord(null);
-                setDescription(null);
-                setImageUrl(null);
-                setCorrectWord(null);
-
-                // 成功モーダルの表示
-                setIsModalOpen(true);
+            if (existingWordId) {
+                // 既存のIDがある場合は、それを使用して上書き
+                documentId = existingWordId;
+                wordToUpdate.createdAt = new Date(); // 既存データの場合も更新日時を設定
+            } else {
+                // 新規の場合は新しいIDを生成
+                documentId = `word_${Date.now()}`;
+                wordToUpdate.createdAt = new Date();
+                // 新規作成時のIDを保存
+                localStorage.setItem("currentWordId", documentId);
             }
+
+            // データを更新
+            const result = await updateWord(documentId, wordToUpdate);
+
+            if (!result) {
+                throw new Error("データの更新に失敗しました");
+            }
+
+            // ゲームデータを保存
+            localStorage.setItem(
+                `gameData_${documentId}`,
+                JSON.stringify({
+                    isCorrect: wordToUpdate.isCorrect,
+                    completedAt: new Date().toISOString(),
+                })
+            );
+
+            // クリーンアップ（currentWordId以外）
+            localStorage.removeItem("wordToRegister");
+            localStorage.removeItem("description");
+            localStorage.removeItem("analysisTarget");
+            localStorage.removeItem("gameTarget");
+
+            // 状態のリセット
+            setWord(null);
+            setDescription(null);
+            setImageUrl(null);
+            setCorrectWord(null);
+
+            // 成功モーダルの表示
+            setIsModalOpen(true);
         } catch (err: unknown) {
-            console.error("更新エラー:", err);
-            setError(err instanceof Error ? err.message : "予期せぬエラーが発生しました");
+            const errorMessage =
+                err instanceof Error ? err.message : "予期せぬエラーが発生しました";
+            console.error("更新エラー:", errorMessage);
+            setError(errorMessage);
         } finally {
             setLoading(false);
         }
@@ -136,7 +158,6 @@ export default function GameResult() {
                             </div>
                         </div>
                     )}
-                    {/* </div> */}
                     <div className={style.descriptionContainer}>
                         <p className={style.descriptionText}>
                             {description || "説明文がありません"}

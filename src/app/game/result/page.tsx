@@ -50,7 +50,9 @@ export default function GameResult() {
                 throw new Error("ユーザー認証が必要です");
             }
 
-            // 更新用のデータを作成
+            // すべての写真を新規として保存するため、常に新しいIDを生成
+            const documentId = `word_${Date.now()}`;
+
             const wordToUpdate: WordData = {
                 word: word.trim(),
                 correctWord: correctWord?.trim() || word.trim(),
@@ -62,17 +64,13 @@ export default function GameResult() {
                 userId: user.uid,
             };
 
-            // 新規IDを生成
-            const documentId = `word_${Date.now()}`;
-
-            // データを更新
             const result = await updateWord(documentId, wordToUpdate);
 
             if (!result) {
-                throw new Error("データの更新に失敗しました");
+                throw new Error("データの保存に失敗しました");
             }
 
-            // ゲームデータを保存
+            // ゲームの結果を保存
             localStorage.setItem(
                 `gameData_${documentId}`,
                 JSON.stringify({
@@ -81,12 +79,11 @@ export default function GameResult() {
                 })
             );
 
-            // クリーンアップ
+            // ローカルストレージのクリーンアップ
             localStorage.removeItem("wordToRegister");
             localStorage.removeItem("description");
             localStorage.removeItem("analysisTarget");
             localStorage.removeItem("gameTarget");
-            localStorage.removeItem("currentWordId"); // これも削除
 
             // 状態のリセット
             setWord(null);
@@ -94,16 +91,17 @@ export default function GameResult() {
             setImageUrl(null);
             setCorrectWord(null);
 
-            // 成功モーダルの表示
+            // 成功モーダルを表示
             setIsModalOpen(true);
         } catch (err: unknown) {
             const errorMessage =
                 err instanceof Error ? err.message : "予期せぬエラーが発生しました";
-            console.error("更新エラー:", errorMessage);
+            console.error("保存エラー:", errorMessage);
             setError(errorMessage);
         } finally {
             setLoading(false);
         }
+
         console.log(error);
     };
 

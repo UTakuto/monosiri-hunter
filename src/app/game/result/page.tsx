@@ -101,6 +101,8 @@ export default function GameResult() {
         } finally {
             setLoading(false);
         }
+
+        console.log(error);
     };
 
     useEffect(() => {

@@ -41,8 +41,6 @@ export default function GameResult() {
             setLoading(true);
             setError(null);
 
-            console.log(error);
-
             if (!word?.trim()) {
                 throw new Error("単語が入力されていません");
             }
@@ -64,22 +62,8 @@ export default function GameResult() {
                 userId: user.uid,
             };
 
-            let documentId: string;
-
-            // LocalStorageから既存のwordIdを取得
-            const existingWordId = localStorage.getItem("currentWordId");
-
-            if (existingWordId) {
-                // 既存のIDがある場合は、それを使用して上書き
-                documentId = existingWordId;
-                wordToUpdate.createdAt = new Date(); // 既存データの場合も更新日時を設定
-            } else {
-                // 新規の場合は新しいIDを生成
-                documentId = `word_${Date.now()}`;
-                wordToUpdate.createdAt = new Date();
-                // 新規作成時のIDを保存
-                localStorage.setItem("currentWordId", documentId);
-            }
+            // 新規IDを生成
+            const documentId = `word_${Date.now()}`;
 
             // データを更新
             const result = await updateWord(documentId, wordToUpdate);
@@ -97,11 +81,12 @@ export default function GameResult() {
                 })
             );
 
-            // クリーンアップ（currentWordId以外）
+            // クリーンアップ
             localStorage.removeItem("wordToRegister");
             localStorage.removeItem("description");
             localStorage.removeItem("analysisTarget");
             localStorage.removeItem("gameTarget");
+            localStorage.removeItem("currentWordId"); // これも削除
 
             // 状態のリセット
             setWord(null);
@@ -119,6 +104,7 @@ export default function GameResult() {
         } finally {
             setLoading(false);
         }
+        console.log(error);
     };
 
     useEffect(() => {

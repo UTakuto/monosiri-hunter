@@ -19,7 +19,7 @@ export default function Page() {
                     <div className={style.header}>
                         <Image
                             className={style.logo}
-                            src={"/logo.png"}
+                            src={"/logo.svg"}
                             alt="ものしりハンター"
                             width={100}
                             height={20}

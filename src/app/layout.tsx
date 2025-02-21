@@ -1,5 +1,6 @@
 import { AuthProvider } from "@/providers/AuthProvider";
 import { Kosugi } from "next/font/google";
+import { Metadata } from "next";
 import "./globals.css";
 
 const kosugi = Kosugi({
@@ -9,6 +10,11 @@ const kosugi = Kosugi({
     variable: "--font-kosugi",
 });
 
+export const metadata: Metadata = {
+    title: "ことばあつめ",
+    description: "ひらがなをていねいにおぼえるアプリ",
+};
+
 export default function RootLayout({
     children,
 }: Readonly<{
@@ -16,6 +22,12 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="ja">
+            <head>
+                {/* iOS用 */}
+                <meta name="apple-mobile-web-app-capable" content="yes" />
+                {/* Android用 */}
+                <meta name="mobile-web-app-capable" content="yes" />
+            </head>
             <body className={kosugi.className}>
                 <AuthProvider>{children}</AuthProvider>
             </body>

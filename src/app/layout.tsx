@@ -11,8 +11,8 @@ const kosugi = Kosugi({
 });
 
 export const metadata: Metadata = {
-    title: "ことばあつめ",
-    description: "ひらがなをていねいにおぼえるアプリ",
+    title: "ものしりハンター",
+    description: "ものしりハンターは、写真から物体を認識し、その名前を当てるゲームです。",
 };
 
 export default function RootLayout({
